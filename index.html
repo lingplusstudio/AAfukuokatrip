@@ -184,6 +184,12 @@ button.tag,button.pc{font-family:inherit;color:inherit;cursor:pointer}
 .addrow button{font-family:inherit;font-size:1rem;color:inherit;cursor:pointer;border:var(--bw) solid var(--ink);border-radius:18px;padding:0 16px;background:var(--yellow)}
 .msg{border:var(--bw) solid var(--ink);border-radius:20px;padding:8px 14px;margin-top:10px;overflow-wrap:anywhere}
 .msg small{font-size:.8rem}
+.tag{display:inline-flex;align-items:center;gap:4px;padding:1px 10px 1px 7px}
+.tag svg{width:16px;height:16px;flex:none;fill:none;stroke:#3E3A39;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.tag.train svg{animation:tgx 1.1s ease-in-out infinite alternate}
+.tag.plane svg{animation:tgy 2s ease-in-out infinite alternate}
+@keyframes tgx{from{transform:translateX(-1.5px)}to{transform:translateX(1.5px)}}
+@keyframes tgy{from{transform:translateY(1px) rotate(-4deg)}to{transform:translateY(-2px) rotate(4deg)}}
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
   *,*::before,*::after{animation:none!important;transition:none!important}
@@ -339,6 +345,14 @@ const E=(p,v,ph)=>`<span class="e" data-p="${p}" data-ph="${esc(ph||'')}">${esc(
 const V=(p,v)=>editing?E(p,v,'點此輸入'):(v?esc(v):'<span class="pending">待填</span>');
 const ctl=(act,a,txt,cls='')=>`<button type="button" class="ed ${cls}" data-act="${act}" data-a="${a}">${txt}</button>`;
 const PER={1:'上午',2:'下午',3:'晚上'};
+const TI={
+walk:`<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="14" cy="4" r="2.2" fill="#fff"/><path d="M13 8l-3 5 3 3v6M13 8l3 4 3 1M10 13l-4 1M13 16l3 6"/></svg>`,
+metro:`<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="3" width="14" height="14" rx="4" fill="#fff"/><rect x="8" y="6" width="8" height="5" rx="1.5" fill="#A8D3E6"/><circle cx="9" cy="14" r="1" fill="#3E3A39"/><circle cx="15" cy="14" r="1" fill="#3E3A39"/><path d="M8 17l-2 4M16 17l2 4"/></svg>`,
+train:`<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2v3M8 5h8"/><rect x="2" y="6" width="20" height="11" rx="4" fill="#fff"/><rect x="5" y="9" width="4" height="3" rx="1" fill="#A8D3E6"/><rect x="10" y="9" width="4" height="3" rx="1" fill="#A8D3E6"/><rect x="15" y="9" width="4" height="3" rx="1" fill="#A8D3E6"/><circle cx="7" cy="19" r="2" fill="#fff"/><circle cx="17" cy="19" r="2" fill="#fff"/></svg>`,
+bus:`<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="4" width="20" height="14" rx="3" fill="#fff"/><path d="M2 12h20"/><rect x="5" y="6.5" width="4" height="3" rx="1" fill="#A8D3E6"/><rect x="10" y="6.5" width="4" height="3" rx="1" fill="#A8D3E6"/><rect x="15" y="6.5" width="4" height="3" rx="1" fill="#A8D3E6"/><circle cx="7" cy="19" r="2" fill="#fff"/><circle cx="17" cy="19" r="2" fill="#fff"/></svg>`,
+taxi:`<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="3" rx="1" fill="#F6D27A"/><path d="M3 16l2-6h14l2 6v2H3z" fill="#fff"/><path d="M7 10l1-3h8l1 3"/><circle cx="7.5" cy="18.5" r="2" fill="#fff"/><circle cx="16.5" cy="18.5" r="2" fill="#fff"/></svg>`,
+plane:`<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 14l8-2-3-8h3l6 8 5-1a2 2 0 010 4l-5-1-6 8H7l3-8-8-2z" fill="#fff"/></svg>`
+};
 const TAGS=[['步行','walk'],['地鐵','metro'],['電車','train'],['巴士','bus'],['計程車','taxi'],['飛機','plane']];
 const ICS=['plane','ball','whale','gundam','orbs','ramen','torii','bag'];
 const reduce=matchMedia('(prefers-reduced-motion: reduce)');
@@ -376,7 +390,7 @@ function rDays(){
   if(editing)h+=`<div class="edbar">分頁簡稱 ${E(b+'.n',x.n,'簡稱')}　<small>（點圖示可換圖）</small><br>${ctl('delD',cur,'刪除這一天','del')}${ctl('addD',0,'＋ 新增一天','add')}</div>`;
   h+=`<div class="note">重點：${E(b+'.note',x.note,'重點說明')}</div><ul class="tl">`+x.items.map((it,i)=>{
     const q=`${b}.items.${i}`,a=`${cur}.${i}`,tg=editing?'button type="button"':'span';
-    const tags=(editing?TAGS:TAGS.filter(t=>it.tags.includes(t[1]))).map(t=>`<${tg} class="tag ${t[1]}${editing&&!it.tags.includes(t[1])?' off':''}"${editing?` data-act="tag" data-a="${a}.${t[1]}"`:''}>${t[0]}</${editing?'button':'span'}>`).join('');
+    const tags=(editing?TAGS:TAGS.filter(t=>it.tags.includes(t[1]))).map(t=>`<${tg} class="tag ${t[1]}${editing&&!it.tags.includes(t[1])?' off':''}"${editing?` data-act="tag" data-a="${a}.${t[1]}"`:''}>${TI[t[1]]}${t[0]}</${editing?'button':'span'}>`).join('');
     return `<li class="p${it.p}"><div class="it${it.must?' must':''}">${it.must?'<span class="badge">必去</span>':''}${editing?`<button type="button" class="pc" data-act="per" data-a="${a}">${PER[it.p]}</button>`:`<span class="pc">${PER[it.p]}</span>`}${it.time||editing?`<span class="pc" style="background:var(--paper)">${E(q+'.time',it.time,'時間')}</span>`:''}
     <h4>${E(q+'.t',it.t,'行程名稱')}</h4>${it.s||editing?`<p>${E(q+'.s',it.s,'說明')}</p>`:''}${tags?`<div class="tags">${tags}</div>`:''}
     ${editing?`<div class="ctl">${ctl('must',a,it.must?'取消必去':'設為必去')}${ctl('up',a,'↑')}${ctl('dn',a,'↓')}${ctl('delI',a,'刪除','del')}</div>`:''}</div></li>`}).join('')+'</ul>';
