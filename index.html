@@ -478,7 +478,7 @@ if (FIREBASE_CONFIG && EDITOR_EMAILS.length) try {
   const deny=()=>{alert('這個帳號沒有編輯權限');signOut(auth)};
   window.cloudGate=()=>{if(ok())return true;if(user){deny();return false}
     signInWithPopup(auth,new GoogleAuthProvider()).then(r=>{user=r.user;ok()?App.setEdit(true):deny()}).catch(e=>alert('登入失敗：'+(e.code||e.message)));return false};
-  $('edtool').querySelector('p').textContent='編輯中：改動會自動存到雲端，Ariel 重新整理就會看到。';
+  $('edtool').querySelector('p').textContent='編輯中：改動會自動存到雲端，其他人重新整理就會看到。';
   $('exBtn').textContent='下載備份';$('rsBtn').textContent='登出';
   $('rsBtn').onclick=()=>{signOut(auth);App.setEdit(false)};
   $('edtool').insertAdjacentHTML('beforeend',' <span id="saveSt" style="font-size:.85rem"></span>');
