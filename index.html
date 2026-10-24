@@ -462,15 +462,15 @@ const FIREBASE_CONFIG = {
   messagingSenderId: "264791845966",
   appId: "1:264791845966:web:4286b72d807e8c4391271f"
 };
-const EDITOR_EMAIL = 'ling19880402@gmail.com';  // 可以編輯的 Google 信箱
+const EDITOR_EMAILS = ['ling19880402@gmail.com', 'thisisariel88@gmail.com'];  // 可以編輯的 Google 信箱
 /* ================================================================ */
-if (FIREBASE_CONFIG && EDITOR_EMAIL) try {
+if (FIREBASE_CONFIG && EDITOR_EMAILS.length) try {
   const B='https://www.gstatic.com/firebasejs/10.12.2/';
   const [{initializeApp},{getFirestore,doc,onSnapshot,setDoc},{getAuth,onAuthStateChanged,signInWithPopup,GoogleAuthProvider,signOut}]=
     await Promise.all([import(B+'firebase-app.js'),import(B+'firebase-firestore.js'),import(B+'firebase-auth.js')]);
   const app=initializeApp(FIREBASE_CONFIG),db=getFirestore(app),auth=getAuth(app),ref=doc(db,'fukuokaTrip','main');
   const $=id=>document.getElementById(id),st=t=>{const e=$('saveSt');if(e)e.textContent=t};
-  let user=null;const ok=()=>user&&user.email&&user.email.toLowerCase()===EDITOR_EMAIL.toLowerCase();
+  let user=null;const ok=()=>user&&user.email&&EDITOR_EMAILS.some(e=>e.toLowerCase()===user.email.toLowerCase());
   onAuthStateChanged(auth,u=>{user=u});
   onSnapshot(ref,s=>{if(s.metadata.hasPendingWrites||App.editing||!s.exists())return;try{App.setData(JSON.parse(s.data().json))}catch(e){console.warn(e)}},e=>console.warn(e));
   let t;window.cloudSave=d=>{clearTimeout(t);st('儲存中…');
