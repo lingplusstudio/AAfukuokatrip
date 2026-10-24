@@ -198,10 +198,8 @@ button.tag,button.pc{font-family:inherit;color:inherit;cursor:pointer}
     <a class="brand" href="#top">福岡</a>
     <a href="#flight" data-s="flight">航班</a>
     <a href="#plan" data-s="plan">行程</a>
-    <a href="#todo" data-s="todo">待辦</a>
-    <a href="#shop" data-s="shop">待買</a>
+    <a href="#hub" data-s="hub">清單</a>
     <a href="#stay" data-s="stay">住宿</a>
-    <a href="#notes" data-s="notes">留言</a>
     <button type="button" class="editBtn" id="editBtn">編輯</button>
   </div>
 </nav>
@@ -284,29 +282,28 @@ button.tag,button.pc{font-family:inherit;color:inherit;cursor:pointer}
 </section>
 
 <!-- TODO -->
-<section id="todo">
-  <h2 style="background:var(--green)">出發前待辦</h2>
-  <div class="prog"><span id="progTx">0 / 0</span><div class="bar"><i id="progBar"></i></div></div>
+<section id="hub">
+  <h2 style="background:var(--green)">清單與留言</h2>
+  <div class="tabs" role="tablist" id="hubTabs" aria-label="清單與留言"><button type="button" class="tab" role="tab" id="htab-todo" data-h="todo" aria-selected="true" style="min-width:90px"><b>待辦</b></button><button type="button" class="tab" role="tab" id="htab-shop" data-h="shop" aria-selected="false" style="min-width:90px"><b>待買</b></button><button type="button" class="tab" role="tab" id="htab-notes" data-h="notes" aria-selected="false" style="min-width:90px"><b>留言</b></button></div>
+  <div class="panel pane" id="p-todo">
+<div class="prog"><span id="progTx">0 / 0</span><div class="bar"><i id="progBar"></i></div></div>
   <ul class="todo" id="todoList"></ul>
+  </div>
+  <div class="panel pane" id="p-shop" hidden>
+<ul class="todo" id="shopList"><li class="foot">需要雲端同步才能使用</li></ul>
+  <div id="shopAdd"></div>
+  </div>
+  <div class="panel pane" id="p-notes" hidden>
+<div id="noteAdd"></div>
+  <div id="noteList"><p class="foot">需要雲端同步才能使用</p></div>
+  </div>
 </section>
 
 <!-- SHOP -->
-<section id="shop">
-  <h2 style="background:var(--yellow)">待買清單</h2>
-  <ul class="todo" id="shopList"><li class="foot">需要雲端同步才能使用</li></ul>
-  <div id="shopAdd"></div>
-</section>
-
 <!-- STAY -->
 <section id="stay">
   <h2 style="background:var(--coral)">住宿資訊</h2>
   <div id="stayBox"></div>
-</section>
-
-<section id="notes">
-  <h2 style="background:var(--blue)">留言板</h2>
-  <div id="noteAdd"></div>
-  <div id="noteList"><p class="foot">需要雲端同步才能使用</p></div>
 </section>
 
 </main>
@@ -473,6 +470,9 @@ $('exBtn').onclick=()=>{
 (function(){const links=[...document.querySelectorAll('nav a[data-s]')];
   const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting)links.forEach(a=>a.classList.toggle('on',a.dataset.s===e.target.id))})},{rootMargin:'-30% 0px -60% 0px'});
   links.forEach(a=>io.observe($(a.dataset.s)))})();
+$('hubTabs').addEventListener('click',e=>{const b=e.target.closest('.tab');if(!b)return;const k=b.dataset.h;
+  [...$('hubTabs').children].forEach(x=>x.setAttribute('aria-selected',x===b));
+  document.querySelectorAll('.pane').forEach(p=>p.hidden=p.id!=='p-'+k);bump('htab-'+k,'p-'+k)});
 render();
 
 </script>
