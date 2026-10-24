@@ -175,6 +175,15 @@ button.tag,button.pc{font-family:inherit;color:inherit;cursor:pointer}
 .edrow{display:block;font-size:.9rem;margin-top:8px}
 .edrow input{font-family:inherit;font-size:1rem;border:var(--bw) solid var(--ink);border-radius:14px;padding:4px 10px;background:var(--paper)}
 .dayhead .ic[data-act]{cursor:pointer}
+.todo li.sh{display:flex;gap:6px;align-items:center}
+.todo li.sh .lb{flex:1;min-width:0}
+.todo input:disabled + .box{opacity:.55}
+.wp{display:inline-block;font-size:.75rem;border:2px solid var(--ink);border-radius:999px;padding:0 8px;background:var(--blue);margin-left:8px;line-height:1.5}
+.addrow{display:flex;gap:8px;margin:12px 0 4px}
+.addrow input{flex:1;min-width:0;font-family:inherit;font-size:1rem;color:var(--ink);border:var(--bw) solid var(--ink);border-radius:18px;padding:8px 14px;background:var(--paper)}
+.addrow button{font-family:inherit;font-size:1rem;color:inherit;cursor:pointer;border:var(--bw) solid var(--ink);border-radius:18px;padding:0 16px;background:var(--yellow)}
+.msg{border:var(--bw) solid var(--ink);border-radius:20px;padding:8px 14px;margin-top:10px;overflow-wrap:anywhere}
+.msg small{font-size:.8rem}
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
   *,*::before,*::after{animation:none!important;transition:none!important}
@@ -190,7 +199,9 @@ button.tag,button.pc{font-family:inherit;color:inherit;cursor:pointer}
     <a href="#flight" data-s="flight">航班</a>
     <a href="#plan" data-s="plan">行程</a>
     <a href="#todo" data-s="todo">待辦</a>
+    <a href="#shop" data-s="shop">待買</a>
     <a href="#stay" data-s="stay">住宿</a>
+    <a href="#notes" data-s="notes">留言</a>
     <button type="button" class="editBtn" id="editBtn">編輯</button>
   </div>
 </nav>
@@ -279,10 +290,23 @@ button.tag,button.pc{font-family:inherit;color:inherit;cursor:pointer}
   <ul class="todo" id="todoList"></ul>
 </section>
 
+<!-- SHOP -->
+<section id="shop">
+  <h2 style="background:var(--yellow)">待買清單</h2>
+  <ul class="todo" id="shopList"><li class="foot">需要雲端同步才能使用</li></ul>
+  <div id="shopAdd"></div>
+</section>
+
 <!-- STAY -->
 <section id="stay">
   <h2 style="background:var(--coral)">住宿資訊</h2>
   <div id="stayBox"></div>
+</section>
+
+<section id="notes">
+  <h2 style="background:var(--blue)">留言板</h2>
+  <div id="noteAdd"></div>
+  <div id="noteList"><p class="foot">需要雲端同步才能使用</p></div>
 </section>
 
 </main>
@@ -466,12 +490,11 @@ const EDITOR_EMAILS = ['ling19880402@gmail.com', 'thisisariel88@gmail.com'];  //
 /* ================================================================ */
 if (FIREBASE_CONFIG && EDITOR_EMAILS.length) try {
   const B='https://www.gstatic.com/firebasejs/10.12.2/';
-  const [{initializeApp},{getFirestore,doc,onSnapshot,setDoc},{getAuth,onAuthStateChanged,signInWithPopup,GoogleAuthProvider,signOut}]=
+  const [{initializeApp},{getFirestore,doc,onSnapshot,setDoc,collection,addDoc,deleteDoc,updateDoc,query,orderBy,limit},{getAuth,onAuthStateChanged,signInWithPopup,GoogleAuthProvider,signOut}]=
     await Promise.all([import(B+'firebase-app.js'),import(B+'firebase-firestore.js'),import(B+'firebase-auth.js')]);
   const app=initializeApp(FIREBASE_CONFIG),db=getFirestore(app),auth=getAuth(app),ref=doc(db,'fukuokaTrip','main');
   const $=id=>document.getElementById(id),st=t=>{const e=$('saveSt');if(e)e.textContent=t};
   let user=null;const ok=()=>user&&user.email&&EDITOR_EMAILS.some(e=>e.toLowerCase()===user.email.toLowerCase());
-  onAuthStateChanged(auth,u=>{user=u});
   onSnapshot(ref,s=>{if(s.metadata.hasPendingWrites||App.editing||!s.exists())return;try{App.setData(JSON.parse(s.data().json))}catch(e){console.warn(e)}},e=>console.warn(e));
   let t;window.cloudSave=d=>{clearTimeout(t);st('儲存中…');
     t=setTimeout(()=>setDoc(ref,{json:JSON.stringify(d),updated:Date.now()}).then(()=>st('已存到雲端 ✓')).catch(e=>st('儲存失敗：'+(e.code||e.message))),400)};
@@ -482,6 +505,32 @@ if (FIREBASE_CONFIG && EDITOR_EMAILS.length) try {
   $('exBtn').textContent='下載備份';$('rsBtn').textContent='登出';
   $('rsBtn').onclick=()=>{signOut(auth);App.setEdit(false)};
   $('edtool').insertAdjacentHTML('beforeend',' <span id="saveSt" style="font-size:.85rem"></span>');
+
+  /* ---- 待買清單與留言板（各自一筆筆存，不會互相覆蓋）---- */
+  const NAMES={'ling19880402@gmail.com':'Amy','thisisariel88@gmail.com':'Ariel'};
+  const sc=collection(db,'fukuokaTrip','main','shop'),nc=collection(db,'fukuokaTrip','main','notes');
+  let shop=[],notes=[];
+  const me=()=>user&&user.email?(NAMES[user.email.toLowerCase()]||'訪客'):'';
+  const tm=t=>{const d=new Date(t),p=n=>String(n).padStart(2,'0');return `${d.getMonth()+1}/${d.getDate()} ${p(d.getHours())}:${p(d.getMinutes())}`};
+  const bad=id=>()=>{$(id).innerHTML='<li class="foot">讀取失敗，請確認 Firestore 規則已更新</li>'};
+  function rShop(){const ed=ok(),a=[...shop].sort((x,y)=>(x.done?1:0)-(y.done?1:0)||x.ts-y.ts);
+    $('shopList').innerHTML=a.length?a.map(i=>`<li class="sh"><label class="lb"><input type="checkbox" data-id="${i.id}"${i.done?' checked':''}${ed?'':' disabled'}><span class="box">${icons.check}</span><span class="tx">${esc(i.text)}<span class="wp">${esc(i.who)}</span></span></label>${ed?`<button type="button" class="ed x" data-del="${i.id}">✕</button>`:''}</li>`).join(''):'<li class="foot">還沒有項目</li>'}
+  function rNotes(){const ed=ok();
+    $('noteList').innerHTML=notes.length?notes.map(n=>`<div class="msg"><small><b>${esc(n.name)}</b>　${tm(n.ts)}</small>${ed?`<button type="button" class="ed x" style="float:right" data-del="${n.id}">✕</button>`:''}<br>${esc(n.text)}</div>`).join(''):'<p class="foot">還沒有留言</p>'}
+  function rAuth(){const ed=ok();
+    $('shopAdd').innerHTML=ed?'<form class="addrow"><input id="shopIn" maxlength="80" placeholder="想買什麼？例如：寶可夢中心 皮卡丘" autocomplete="off"><button>加入</button></form>':'<p class="foot">想新增或勾選，請先點上方「編輯」登入。</p>';
+    $('noteAdd').innerHTML=ed?`<form class="addrow"><input id="noteIn" maxlength="200" placeholder="${esc(me())}：留個言…" autocomplete="off"><button>送出</button></form>`:'<p class="foot">想留言，請先點上方「編輯」登入。</p>';
+    rShop();rNotes()}
+  document.addEventListener('submit',e=>{const f=e.target;if(!f.classList.contains('addrow')||!ok())return;e.preventDefault();
+    const i=f.querySelector('input'),v=i.value.trim();if(!v)return;
+    (i.id==='shopIn'?addDoc(sc,{text:v,who:me(),done:false,ts:Date.now()}):addDoc(nc,{text:v,name:me(),ts:Date.now()}))
+      .then(()=>{i.value=''}).catch(er=>alert('儲存失敗：'+(er.code||er.message)))});
+  $('shopList').addEventListener('change',e=>{const t=e.target;if(ok()&&t.dataset.id)updateDoc(doc(sc,t.dataset.id),{done:t.checked})});
+  document.addEventListener('click',e=>{const b=e.target.closest('[data-del]');if(!b||!ok())return;
+    if(confirm('刪除這一筆？'))deleteDoc(doc(b.closest('#shopList')?sc:nc,b.dataset.del))});
+  onSnapshot(sc,q=>{shop=q.docs.map(d=>({id:d.id,...d.data()}));rShop()},bad('shopList'));
+  onSnapshot(query(nc,orderBy('ts','desc'),limit(50)),q=>{notes=q.docs.map(d=>({id:d.id,...d.data()}));rNotes()},()=>{$('noteList').innerHTML='<p class="foot">讀取失敗，請確認 Firestore 規則已更新</p>'});
+  onAuthStateChanged(auth,u=>{user=u;rAuth()});rAuth();
 } catch(e){console.warn('雲端同步未啟用，改用單機模式',e)}
 </script>
 </body>
