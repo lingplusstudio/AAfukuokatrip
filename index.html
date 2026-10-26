@@ -206,6 +206,25 @@ button.tag,button.pc{font-family:inherit;color:inherit;cursor:pointer}
 .fg{display:inline-block;font-weight:400;font-size:1rem;margin:16px 6px 8px 0;border:var(--bw) solid var(--ink);border-radius:999px;padding:0 14px;background:var(--yellow)}
 .todo .tx small{display:block;font-size:.82rem;line-height:1.45;margin-top:2px}
 .tips{list-style:disc;padding-left:1.3em;display:grid;gap:6px;font-size:.9rem;margin-top:4px}
+
+.rainl{list-style:none;display:grid;gap:12px;margin-top:4px}
+.rainl .it h4{display:flex;flex-wrap:wrap;align-items:center;gap:4px}
+.splitform{margin-top:12px}
+.splitform input:not([type=checkbox]),.splitform select{font-family:inherit;font-size:1rem;color:var(--ink);border:var(--bw) solid var(--ink);border-radius:18px;padding:8px 14px;background:var(--paper);width:100%;margin-top:8px}
+.splitform select{width:auto;min-width:8em;margin-top:2px}
+.sp-who{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.sp-who label{border:2.5px solid var(--ink);border-radius:999px;padding:1px 12px;cursor:pointer;background:var(--paper);display:inline-flex;gap:6px;align-items:center;font-size:.92rem}
+.sp-who label:has(input:checked){background:var(--green)}
+.sp-who input{accent-color:#3E3A39}
+.sp-go{font-family:inherit;font-size:1rem;color:inherit;cursor:pointer;border:var(--bw) solid var(--ink);border-radius:18px;padding:6px 20px;background:var(--yellow);margin-top:12px}
+.sp-sum{margin-top:16px;padding:14px 16px}
+.sp-sum h3{font-weight:400;font-size:1.1rem}
+.sp-sum .big{font-size:1.3rem;margin-top:4px}
+.sp-tr{margin-top:10px;display:grid;gap:6px}
+.sp-tr div{border:var(--bw) solid var(--ink);border-radius:16px;padding:4px 12px;background:var(--yellow);font-size:.95rem}
+.sp-ok{background:var(--green)!important}
+.sp-pos{color:#2d6a2d}.sp-neg{color:#b3392a}
+.msg .ed.x{float:right}
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
   *,*::before,*::after{animation:none!important;transition:none!important}
@@ -314,7 +333,7 @@ button.tag,button.pc{font-family:inherit;color:inherit;cursor:pointer}
 <!-- TODO -->
 <section id="hub">
   <h2 style="background:var(--green)">清單與留言</h2>
-  <div class="tabs" role="tablist" id="hubTabs" aria-label="清單與留言"><button type="button" class="tab" role="tab" id="htab-todo" data-h="todo" aria-selected="true" style="min-width:90px"><b>待辦</b></button><button type="button" class="tab" role="tab" id="htab-shop" data-h="shop" aria-selected="false" style="min-width:90px"><b>待買</b></button><button type="button" class="tab" role="tab" id="htab-food" data-h="food" aria-selected="false" style="min-width:90px"><b>美食</b></button><button type="button" class="tab" role="tab" id="htab-notes" data-h="notes" aria-selected="false" style="min-width:90px"><b>留言</b></button></div>
+  <div class="tabs" role="tablist" id="hubTabs" aria-label="清單與留言"><button type="button" class="tab" role="tab" id="htab-todo" data-h="todo" aria-selected="true" style="min-width:90px"><b>待辦</b></button><button type="button" class="tab" role="tab" id="htab-shop" data-h="shop" aria-selected="false" style="min-width:90px"><b>待買</b></button><button type="button" class="tab" role="tab" id="htab-food" data-h="food" aria-selected="false" style="min-width:90px"><b>美食</b></button><button type="button" class="tab" role="tab" id="htab-split" data-h="split" aria-selected="false" style="min-width:90px"><b>分帳</b></button><button type="button" class="tab" role="tab" id="htab-notes" data-h="notes" aria-selected="false" style="min-width:90px"><b>留言</b></button></div>
   <div class="panel pane" id="p-todo">
 <div class="prog"><span id="progTx">0 / 0</span><div class="bar"><i id="progBar"></i></div></div>
   <ul class="todo" id="todoList"></ul>
@@ -325,6 +344,9 @@ button.tag,button.pc{font-family:inherit;color:inherit;cursor:pointer}
   </div>
   <div class="panel pane" id="p-food" hidden>
 <div id="foodBox"></div>
+  </div>
+  <div class="panel pane" id="p-split" hidden>
+<div id="spMem"></div><div id="spForm"></div><div id="spSum"></div><div id="spList"></div>
   </div>
   <div class="panel pane" id="p-notes" hidden>
 <div id="noteAdd"></div>
@@ -342,7 +364,7 @@ button.tag,button.pc{font-family:inherit;color:inherit;cursor:pointer}
 </main>
 <footer>旅途愉快，平安回家</footer>
 
-<script type="application/json" id="seed">{"rev":6,"meta":{"t1":"Ariel＋Amy","t2":"福岡一起過聖誕","sub":"6天5夜 5天4夜・海之中島・鋼彈・寶可夢","cd":"距離出發還有","at":"2026-12-22T14:15"},"flights":[{"who":"Amy","air":"中華航空","list":[{"dir":"go","date":"12/22","route":"桃園 → 福岡","rows":[["航班","CI128"],["起飛","14:15・桃園 T2"],["抵達","17:30・福岡 T-I"],["行李","1PC"]]},{"dir":"back","date":"12/27","route":"福岡 → 桃園","rows":[["航班","CI111"],["起飛","11:00・福岡 T-I"],["抵達","12:35・桃園 T2"],["行李","2PC"]]}]},{"who":"Ariel","air":"長榮航空","list":[{"dir":"go","date":"12/23","route":"台灣 → 福岡","rows":[["航班",""],["起飛","08:00"],["抵達","11:15・福岡"]]},{"dir":"back","date":"12/27","route":"福岡 → 台灣","rows":[["航班",""],["起飛","12:15"],["抵達","13:50・台灣"]]}]}],"days":[{"d":"12/22","n":"抵達","ic":"plane","title":"Amy 抵達福岡，先安頓休息","note":"Amy 先安頓休息","items":[{"p":1,"time":"","t":"在台灣","s":"出發前最後確認證件與行李","tags":[],"must":false},{"p":2,"time":"14:15","t":"Amy 從桃園出發","s":"CI128，桃園 T2","tags":["plane"],"must":false},{"p":2,"time":"17:30","t":"Amy 抵達福岡","s":"入境後搭地鐵到博多站，步行到飯店；機場若有聖誕拍照點，順手拍一張","tags":["metro","walk"],"must":false},{"p":3,"time":"","t":"飯店入住、周邊晚餐","s":"THE BASICS FUKUOKA，入住 15:00 起；晚餐建議吃博多站內的大地のうどん或 Shin-Shin（見美食分頁）","tags":["walk"],"must":false}]},{"d":"12/23","n":"寶可夢","ic":"ball","title":"Ariel 到福岡，寶可夢＋聖誕燈海","note":"兩家集合・寶可夢・晚上看聖誕市集與燈光秀","items":[{"p":1,"time":"","t":"大濠公園散步","s":"Amy 先逛逛，Ariel 長榮 08:00 起飛","tags":["walk"],"must":false},{"p":1,"time":"11:15","t":"Ariel 抵達福岡","s":"入境後前往飯店放行李","tags":["plane","metro"],"must":false},{"p":2,"time":"","t":"兩家會合 → 寶可夢中心（博多 OIOI）","s":"小朋友一起買爆寶可夢","tags":["metro","walk"],"must":true},{"p":2,"time":"","t":"櫛田神社","s":"順路參拜，約 30 到 40 分鐘","tags":["walk"],"must":false},{"p":3,"time":"","t":"大東園 本店（櫛田神社附近）","s":"建議 16:00 後再去：平日晚餐時段 16:00–23:00（午餐 11:30–14:30）；吃完走去站前廣場看市集和燈光秀；出發前確認是否要訂位","tags":["walk"],"must":false},{"p":3,"time":"","t":"JR 博多站前廣場聖誕市集＋光の街・博多","s":"市集 11/7–12/25，平日 16:00–23:00；燈飾約 80 萬顆，每 15 分鐘一場燈光秀；晚餐可在市集或博多車站美食街","tags":["walk"],"must":false}]},{"d":"12/24","n":"海之中道","ic":"whale","title":"海之中道・平安夜看燈","note":"全員整天戶外＋海洋動物放電・晚上回博多過平安夜","items":[{"p":1,"time":"","t":"海洋世界海之中道","s":"水族館，看海豚、企鵝","tags":["train"],"must":false},{"p":2,"time":"","t":"海之中道海濱公園","s":"戶外跑跳放電；風大偏冷，累了就提早收；花海要看季節，12 月不一定有；太冷或下雨可和 12/26 對調","tags":["walk"],"must":false},{"p":3,"time":"","t":"回博多，焼肉チャンピオン（AMU PLAZA 10 樓）","s":"站內搭電梯就到，11:00–23:00（L.O. 22:00）；平安夜務必先訂位","tags":["train"],"must":false},{"p":3,"time":"","t":"站前廣場聖誕市集＋燈光秀","s":"12/24 市集 12:00–23:00，人多；吃完晚餐再來看燈光秀","tags":["walk"],"must":false}]},{"d":"12/25","n":"鋼彈","ic":"gundam","title":"太宰府散步・鋼彈聖誕節","note":"太宰府・鋼彈朝聖採買","items":[{"p":1,"time":"","t":"太宰府天滿宮","s":"表參道、御神牛、梅枝餅；從博多去通常要在西鐵二日市轉車，御本殿整修狀況出發前確認","tags":["train","walk"],"must":false},{"p":2,"time":"","t":"LaLaport 商場・1:1 實物大鋼彈","s":"鋼彈朝聖，順便採買","tags":["bus"],"must":true},{"p":3,"time":"","t":"LaLaport 美食街逛街","s":"吃晚餐、慢慢逛","tags":["walk"],"must":false},{"p":3,"time":"","t":"站前廣場市集最後一天（選擇性）","s":"12/25 市集營業到 23:00；想要限定馬克杯可補買，杯子不能單買，要搭配飲料","tags":["bus","walk"],"must":false}],"tree":true},{"d":"12/26","n":"teamLab","ic":"orbs","title":"光影體驗・百道浜聖誕・博多運河城","note":"室內光影體驗・最後大採購","items":[{"p":1,"time":"","t":"teamLab Forest","s":"位於 BOSS E・ZO FUKUOKA 5 樓；週六 10:00 開館，先訂好時段；巴士到 PayPay 巨蛋站再走約 7 分鐘","tags":["bus"],"must":false},{"p":1,"time":"","t":"百道浜 ICE WORLD（選擇性）","s":"福岡塔前的聖誕市集；今年開放日期出發前確認，累了就跳過","tags":["walk"],"must":false},{"p":2,"time":"","t":"博多運河城・博多站購物","s":"看水舞、逛街；博多站周邊有 JR 博多城 AMU、阪急、KITTE。退稅新制：先付含稅價，買的東西先別拆，離境前完成海關確認；伴手禮在站內一次買：Mignon、努努雞、鈴懸、三日月屋（見美食分頁）","tags":["bus","walk"],"must":false},{"p":3,"time":"","t":"市區拉麵、打包行李","s":"博多站內的博多一双或 Shin-Shin；想吃燒肉可選焼肉 多牛 駅南店（17:30 開，週六有營業）；吃完回飯店打包，想看燈飾可順路到中洲一帶","tags":["walk"],"must":false}]},{"d":"12/27","n":"返台","ic":"bag","title":"退房直奔機場","note":"早上退房直奔機場","items":[{"p":1,"time":"","t":"退房，前往機場","s":"Amy 11:00 起飛，建議早點出發；退稅要在託運行李前完成海關確認；退房時間 05:00–11:00；早餐直接在機場吃","tags":["metro"],"must":false},{"p":1,"time":"11:00","t":"Amy 起飛","s":"CI111，福岡 T-I","tags":["plane"],"must":false},{"p":2,"time":"12:15","t":"Ariel 起飛","s":"長榮航空","tags":["plane"],"must":false},{"p":2,"time":"","t":"平安抵達台灣","s":"Amy 12:35、Ariel 13:50 抵達","tags":[],"must":false}]}],"todos":["購買旅遊險","開通漫遊（或準備 eSIM／網卡）","換外幣（日圓）、準備交通 IC 卡","確認天氣（出發前一週、前一天各看一次）","確認護照效期（建議 6 個月以上）","填寫 Visit Japan Web","確認機票與飯店訂單","預約 teamLab Forest 門票","預購海洋世界海之中道門票","Amy 與 Ariel 互相確認班機與到達時間","訂好寶可夢與鋼彈的採買預算","12/26 晚上打包，確認退房時間","了解退稅新制：先付含稅價，託運行李前完成海關確認","訂 12/24 平安夜晚餐","12/27 提早出發去機場（留時間辦退稅確認）"],"stay":{"name":"THE BASICS FUKUOKA","badge":"★ 4 星級","address":"Hakata-ku Hakataeki Higashi 2-14-1，福岡，日本","guests":[{"who":"Amy","in":"12/22","out":"12/27"},{"who":"Ariel","in":"12/23","out":"12/27"}],"rows":[["入住時間","15:00 – 00:00"],["退房時間","05:00 – 11:00"],["房型","中等雙床房（第 2 章）－禁菸，1 間"],["電話","+81 92-412-1234"]]},"food":[{"g":"車站必吃正餐","items":[{"n":"博多一双","t":"濃厚豚骨拉麵","s":"豚骨卡布奇諾，極致濃郁的脂泡"},{"n":"大地のうどん","t":"牛蒡天婦羅烏龍麵","s":"福岡靈魂，巨無霸牛蒡圈"},{"n":"おおやま","t":"極上牛腸鍋","s":"濃郁味噌湯頭"},{"n":"Shin-Shin","t":"純情豚骨拉麵","s":"極細麵條吸滿甘甜湯頭"}],"k":"博多駅"},{"g":"車站必買伴手禮","items":[{"n":"Il Forno del Mignon","t":"現烤迷你可頌","s":"秤重賣，超涮嘴"},{"n":"努努雞","t":"冷吃炸雞","s":"冰鎮炸雞，下酒最強神器"},{"n":"鈴懸","t":"高級和菓子","s":"草莓大福與鈴乃最中"}],"k":"博多駅"},{"g":"在地私房輕食","items":[{"n":"むつか堂","t":"明太子吐司","s":"鬆軟吐司抹滿明太子"},{"n":"三日月屋","t":"天然酵母可頌","s":"獨立包裝，高級感"},{"n":"よかたい","t":"站立居酒屋","s":"在地大叔最愛，CP 值高"}],"k":"博多駅"},{"g":"福岡燒肉 10 大","items":[{"n":"にく屋 肉いち 博多店","t":"博多・薬院","s":"特選 7 種拼盤、厚切牛舌；16:00–24:00（L.O. 23:00）"},{"n":"大東園 本店","t":"櫛田神社附近","s":"牛尾湯與冷麵；平日 11:30–14:30、16:00–23:00，六日與假日 11:30–23:00；無固定公休"},{"n":"焼肉 多牛 駅南店","t":"博多駅南","s":"七輪炭火，平民價格；17:30–23:00（L.O. 22:30），週一公休"},{"n":"利花苑 大名本店","t":"大名","s":"整頭購入黑毛和牛，珍稀部位；11:30–22:30（L.O. 22:00），第 1、3 個週三公休"},{"n":"力飯店","t":"西中洲","s":"熟成赤身肉，顛覆和牛油膩印象；週二到週六 17:00–24:00，週日與假日 17:00–23:00，週一公休"},{"n":"焼肉すどう 春吉","t":"春吉","s":"頂級和牛無菜單料理，全席包廂；12:00–24:00，完全預約制"},{"n":"泰元 本館","t":"舞鶴","s":"牧場直營，純黑毛和牛專門；17:00–23:00（L.O. 22:30）"},{"n":"焼肉ニューヨーコ","t":"春吉","s":"特選厚切牛舌、絲絨肉片；17:00–23:00（L.O. 22:30），不定休"},{"n":"黑毛和牛 BAKURO 薬院本店","t":"薬院","s":"尾崎牧場直營，30 種以上稀有部位；午餐 11:30–（L.O. 14:30），晚餐 17:00–（L.O. 21:30），不定休"},{"n":"焼肉チャンピオン JR博多シティ店","t":"博多車站","s":"AMU PLAZA 10 樓，A5 和牛「Zabu-Suki」；11:00–23:00（L.O. 22:00），午間套餐 11:00–15:00"}],"k":"福岡"}],"tips":["拉麵續麵：すみません、替え玉お願いします。","問路：筑紫口はどちらですか？搞懂博多口與筑紫口是車站生存關鍵","找不到空置物櫃：可找 JR 剪票口內、AMU Plaza 地下街邊緣，或用 ecbo cloak 預約","避開人潮：Mignon 要先看清排隊線；吃飯可去 KITTE 博多 B1 或博多地下街","燒肉：熱門店建議提早預約或開店前到場","燒肉：多數店會送高麗菜，可免費續盤；高級店建議選套餐","燒肉點餐：「おまかせでお願いします」＝交給店家安排","燒肉點餐：「生ビールと豚バラをお願いします」＝生啤酒和豬五花"]}</script>
+<script type="application/json" id="seed">{"rev":7,"meta":{"t1":"Ariel＋Amy","t2":"福岡一起過聖誕","sub":"6天5夜 5天4夜・海之中島・鋼彈・寶可夢","cd":"距離出發還有","at":"2026-12-22T14:15"},"flights":[{"who":"Amy","air":"中華航空","list":[{"dir":"go","date":"12/22","route":"桃園 → 福岡","rows":[["航班","CI128"],["起飛","14:15・桃園 T2"],["抵達","17:30・福岡 T-I"],["行李","1PC"]]},{"dir":"back","date":"12/27","route":"福岡 → 桃園","rows":[["航班","CI111"],["起飛","11:00・福岡 T-I"],["抵達","12:35・桃園 T2"],["行李","2PC"]]}]},{"who":"Ariel","air":"長榮航空","list":[{"dir":"go","date":"12/23","route":"台灣 → 福岡","rows":[["航班",""],["起飛","08:00"],["抵達","11:15・福岡"]]},{"dir":"back","date":"12/27","route":"福岡 → 台灣","rows":[["航班",""],["起飛","12:15"],["抵達","13:50・台灣"]]}]}],"days":[{"d":"12/22","n":"抵達","ic":"plane","title":"Amy 抵達福岡，先安頓休息","note":"Amy 先安頓休息","items":[{"p":1,"time":"","t":"在台灣","s":"出發前最後確認證件與行李","tags":[],"must":false},{"p":2,"time":"14:15","t":"Amy 從桃園出發","s":"CI128，桃園 T2","tags":["plane"],"must":false},{"p":2,"time":"17:30","t":"Amy 抵達福岡","s":"入境後搭地鐵到博多站，步行到飯店；機場若有聖誕拍照點，順手拍一張","tags":["metro","walk"],"must":false},{"p":3,"time":"","t":"飯店入住、周邊晚餐","s":"THE BASICS FUKUOKA，入住 15:00 起；晚餐建議吃博多站內的大地のうどん或 Shin-Shin（見美食分頁）","tags":["walk"],"must":false}]},{"d":"12/23","n":"寶可夢","ic":"ball","title":"Ariel 到福岡，寶可夢＋聖誕燈海","note":"兩家集合・寶可夢・晚上看聖誕市集與燈光秀","items":[{"p":1,"time":"","t":"大濠公園散步","s":"Amy 先逛逛，Ariel 長榮 08:00 起飛","tags":["walk"],"must":false},{"p":1,"time":"11:15","t":"Ariel 抵達福岡","s":"入境後前往飯店放行李","tags":["plane","metro"],"must":false},{"p":2,"time":"","t":"兩家會合 → 寶可夢中心（博多 OIOI）","s":"小朋友一起買爆寶可夢","tags":["metro","walk"],"must":true},{"p":2,"time":"","t":"櫛田神社","s":"順路參拜，約 30 到 40 分鐘","tags":["walk"],"must":false},{"p":3,"time":"","t":"大東園 本店（櫛田神社附近）","s":"建議 16:00 後再去：平日晚餐時段 16:00–23:00（午餐 11:30–14:30）；吃完走去站前廣場看市集和燈光秀；出發前確認是否要訂位","tags":["walk"],"must":false},{"p":3,"time":"","t":"JR 博多站前廣場聖誕市集＋光の街・博多","s":"市集 11/7–12/25，平日 16:00–23:00；燈飾約 80 萬顆，每 15 分鐘一場燈光秀；晚餐可在市集或博多車站美食街","tags":["walk"],"must":false}]},{"d":"12/24","n":"海之中道","ic":"whale","title":"海之中道・平安夜看燈","note":"全員整天戶外＋海洋動物放電・晚上回博多過平安夜","items":[{"p":1,"time":"","t":"海洋世界海之中道","s":"水族館，看海豚、企鵝","tags":["train"],"must":false},{"p":2,"time":"","t":"海之中道海濱公園","s":"戶外跑跳放電；風大偏冷，累了就提早收；花海要看季節，12 月不一定有；太冷或下雨請看下方雨天備案，或和 12/26 對調","tags":["walk"],"must":false},{"p":3,"time":"","t":"回博多，焼肉チャンピオン（AMU PLAZA 10 樓）","s":"站內搭電梯就到，11:00–23:00（L.O. 22:00）；平安夜務必先訂位","tags":["train"],"must":false},{"p":3,"time":"","t":"站前廣場聖誕市集＋燈光秀","s":"12/24 市集 12:00–23:00，人多；吃完晚餐再來看燈光秀","tags":["walk"],"must":false}],"rain":[{"n":"海洋世界海之中道（縮短版）","t":"水族館","s":"水族館本身就在室內，雨天只留水族館、跳過戶外的海濱公園，早點回博多。12 月平常 10:00–17:00；去年平安夜、聖誕節延長到 21:00，今年出發前確認"},{"n":"福岡アンパンマンこどもミュージアム","t":"親子室內樂園","s":"博多リバレインモール 5・6 樓，地鐵中洲川端站直結，不用淋雨。10:00–17:00（最終入場 16:00）；1 歲以上約 ¥2,000–2,200，價格依日期變動，先看官網價格日曆；上午人多，下午較悠閒"},{"n":"福岡市科學館","t":"科學館・星象","s":"地鐵七隈線六本松站旁，體驗型展示加圓頂劇場（星象）。週二休館，12/24 是週四有開；展示室與星象各自買票，大人約 ¥510、中小學生 ¥200、學齡前免費；晚間閉館時間依日期不同，出發前確認"},{"n":"福岡市博物館","t":"歷史博物館","s":"百道浜，福岡塔就在附近。9:30–17:30（入館到 17:00），週一休館，12/24 週四有開；一般 ¥200、中學生以下免費。偏安靜，適合累了想坐一下的時段"},{"n":"博多站周邊室內逛街","t":"購物","s":"JR 博多城 AMU、KITTE、阪急都在站旁，全程不用出站淋雨；運河城步行約 15 分鐘。12/26 本來就排博多運河城，若 12/24 用掉，12/26 的採購行程可再調整"}]},{"d":"12/25","n":"鋼彈","ic":"gundam","title":"太宰府散步・鋼彈聖誕節","note":"太宰府・鋼彈朝聖採買","items":[{"p":1,"time":"","t":"太宰府天滿宮","s":"表參道、御神牛、梅枝餅；從博多去通常要在西鐵二日市轉車，御本殿整修狀況出發前確認","tags":["train","walk"],"must":false},{"p":2,"time":"","t":"LaLaport 商場・1:1 實物大鋼彈","s":"鋼彈朝聖，順便採買","tags":["bus"],"must":true},{"p":3,"time":"","t":"LaLaport 美食街逛街","s":"吃晚餐、慢慢逛","tags":["walk"],"must":false},{"p":3,"time":"","t":"站前廣場市集最後一天（選擇性）","s":"12/25 市集營業到 23:00；想要限定馬克杯可補買，杯子不能單買，要搭配飲料","tags":["bus","walk"],"must":false}],"tree":true},{"d":"12/26","n":"teamLab","ic":"orbs","title":"光影體驗・百道浜聖誕・博多運河城","note":"室內光影體驗・最後大採購","items":[{"p":1,"time":"","t":"teamLab Forest","s":"位於 BOSS E・ZO FUKUOKA 5 樓；週六 10:00 開館，先訂好時段；巴士到 PayPay 巨蛋站再走約 7 分鐘","tags":["bus"],"must":false},{"p":1,"time":"","t":"百道浜 ICE WORLD（選擇性）","s":"福岡塔前的聖誕市集；今年開放日期出發前確認，累了就跳過","tags":["walk"],"must":false},{"p":2,"time":"","t":"博多運河城・博多站購物","s":"看水舞、逛街；博多站周邊有 JR 博多城 AMU、阪急、KITTE。退稅新制：先付含稅價，買的東西先別拆，離境前完成海關確認；伴手禮在站內一次買：Mignon、努努雞、鈴懸、三日月屋（見美食分頁）","tags":["bus","walk"],"must":false},{"p":3,"time":"","t":"市區拉麵、打包行李","s":"博多站內的博多一双或 Shin-Shin；想吃燒肉可選焼肉 多牛 駅南店（17:30 開，週六有營業）；吃完回飯店打包，想看燈飾可順路到中洲一帶","tags":["walk"],"must":false}]},{"d":"12/27","n":"返台","ic":"bag","title":"退房直奔機場","note":"早上退房直奔機場","items":[{"p":1,"time":"","t":"退房，前往機場","s":"Amy 11:00 起飛，建議早點出發；退稅要在託運行李前完成海關確認；退房時間 05:00–11:00；早餐直接在機場吃","tags":["metro"],"must":false},{"p":1,"time":"11:00","t":"Amy 起飛","s":"CI111，福岡 T-I","tags":["plane"],"must":false},{"p":2,"time":"12:15","t":"Ariel 起飛","s":"長榮航空","tags":["plane"],"must":false},{"p":2,"time":"","t":"平安抵達台灣","s":"Amy 12:35、Ariel 13:50 抵達","tags":[],"must":false}]}],"todos":["購買旅遊險","開通漫遊（或準備 eSIM／網卡）","換外幣（日圓）、準備交通 IC 卡","確認天氣（出發前一週、前一天各看一次）","確認護照效期（建議 6 個月以上）","填寫 Visit Japan Web","確認機票與飯店訂單","預約 teamLab Forest 門票","預購海洋世界海之中道門票","Amy 與 Ariel 互相確認班機與到達時間","訂好寶可夢與鋼彈的採買預算","12/26 晚上打包，確認退房時間","了解退稅新制：先付含稅價，託運行李前完成海關確認","訂 12/24 平安夜晚餐","12/23 晚上確認 12/24 天氣，決定是否改用雨天備案","12/27 提早出發去機場（留時間辦退稅確認）"],"stay":{"name":"THE BASICS FUKUOKA","badge":"★ 4 星級","address":"Hakata-ku Hakataeki Higashi 2-14-1，福岡，日本","guests":[{"who":"Amy","in":"12/22","out":"12/27"},{"who":"Ariel","in":"12/23","out":"12/27"}],"rows":[["入住時間","15:00 – 00:00"],["退房時間","05:00 – 11:00"],["房型","中等雙床房（第 2 章）－禁菸，1 間"],["電話","+81 92-412-1234"]]},"food":[{"g":"車站必吃正餐","items":[{"n":"博多一双","t":"濃厚豚骨拉麵","s":"豚骨卡布奇諾，極致濃郁的脂泡"},{"n":"大地のうどん","t":"牛蒡天婦羅烏龍麵","s":"福岡靈魂，巨無霸牛蒡圈"},{"n":"おおやま","t":"極上牛腸鍋","s":"濃郁味噌湯頭"},{"n":"Shin-Shin","t":"純情豚骨拉麵","s":"極細麵條吸滿甘甜湯頭"}],"k":"博多駅"},{"g":"車站必買伴手禮","items":[{"n":"Il Forno del Mignon","t":"現烤迷你可頌","s":"秤重賣，超涮嘴"},{"n":"努努雞","t":"冷吃炸雞","s":"冰鎮炸雞，下酒最強神器"},{"n":"鈴懸","t":"高級和菓子","s":"草莓大福與鈴乃最中"}],"k":"博多駅"},{"g":"在地私房輕食","items":[{"n":"むつか堂","t":"明太子吐司","s":"鬆軟吐司抹滿明太子"},{"n":"三日月屋","t":"天然酵母可頌","s":"獨立包裝，高級感"},{"n":"よかたい","t":"站立居酒屋","s":"在地大叔最愛，CP 值高"}],"k":"博多駅"},{"g":"福岡燒肉 10 大","items":[{"n":"にく屋 肉いち 博多店","t":"博多・薬院","s":"特選 7 種拼盤、厚切牛舌；16:00–24:00（L.O. 23:00）"},{"n":"大東園 本店","t":"櫛田神社附近","s":"牛尾湯與冷麵；平日 11:30–14:30、16:00–23:00，六日與假日 11:30–23:00；無固定公休"},{"n":"焼肉 多牛 駅南店","t":"博多駅南","s":"七輪炭火，平民價格；17:30–23:00（L.O. 22:30），週一公休"},{"n":"利花苑 大名本店","t":"大名","s":"整頭購入黑毛和牛，珍稀部位；11:30–22:30（L.O. 22:00），第 1、3 個週三公休"},{"n":"力飯店","t":"西中洲","s":"熟成赤身肉，顛覆和牛油膩印象；週二到週六 17:00–24:00，週日與假日 17:00–23:00，週一公休"},{"n":"焼肉すどう 春吉","t":"春吉","s":"頂級和牛無菜單料理，全席包廂；12:00–24:00，完全預約制"},{"n":"泰元 本館","t":"舞鶴","s":"牧場直營，純黑毛和牛專門；17:00–23:00（L.O. 22:30）"},{"n":"焼肉ニューヨーコ","t":"春吉","s":"特選厚切牛舌、絲絨肉片；17:00–23:00（L.O. 22:30），不定休"},{"n":"黑毛和牛 BAKURO 薬院本店","t":"薬院","s":"尾崎牧場直營，30 種以上稀有部位；午餐 11:30–（L.O. 14:30），晚餐 17:00–（L.O. 21:30），不定休"},{"n":"焼肉チャンピオン JR博多シティ店","t":"博多車站","s":"AMU PLAZA 10 樓，A5 和牛「Zabu-Suki」；11:00–23:00（L.O. 22:00），午間套餐 11:00–15:00"}],"k":"福岡"}],"tips":["拉麵續麵：すみません、替え玉お願いします。","問路：筑紫口はどちらですか？搞懂博多口與筑紫口是車站生存關鍵","找不到空置物櫃：可找 JR 剪票口內、AMU Plaza 地下街邊緣，或用 ecbo cloak 預約","避開人潮：Mignon 要先看清排隊線；吃飯可去 KITTE 博多 B1 或博多地下街","燒肉：熱門店建議提早預約或開店前到場","燒肉：多數店會送高麗菜，可免費續盤；高級店建議選套餐","燒肉點餐：「おまかせでお願いします」＝交給店家安排","燒肉點餐：「生ビールと豚バラをお願いします」＝生啤酒和豬五花"],"members":["Amy","Ariel"]}</script>
 <script>
 /* ---------- 插圖 ---------- */
 const S='viewBox="0 0 64 64" fill="none" stroke="#3E3A39" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"';
@@ -423,6 +445,13 @@ function rDays(){
     <h4>${E(q+'.t',it.t,'行程名稱')}</h4>${it.s||editing?`<p>${E(q+'.s',it.s,'說明')}</p>`:''}${tags?`<div class="tags">${tags}</div>`:''}
     ${editing?`<div class="ctl">${ctl('must',a,it.must?'取消必去':'設為必去')}${ctl('up',a,'↑')}${ctl('dn',a,'↓')}${ctl('delI',a,'刪除','del')}</div>`:''}</div></li>`}).join('')+'</ul>';
   if(editing)h+=ctl('addI',cur,'＋ 新增行程','add');
+  const R=x.rain||[];
+  if(R.length||editing){
+    h+='<h3 class="fg" style="background:var(--blue)">雨天備案</h3>';
+    if(R.length)h+='<p class="foot">下雨或太冷時，上午、下午各挑 1 個替換原行程。資訊整理自公開網頁，出發前請以官網為準。</p>';
+    h+='<ul class="rainl">'+R.map((r,i)=>{const q=`${b}.rain.${i}`;
+      return `<li class="it"><h4>${E(q+'.n',r.n,'名稱')}<span class="wp">${E(q+'.t',r.t,'類型')}</span></h4><p>${E(q+'.s',r.s,'說明')}</p><div class="tags"><a class="mp" href="${esc(mapUrl(r,{k:'福岡'}))}" target="_blank" rel="noopener">${MPI}地圖</a></div>${editing?`<div class="ctl">${ctl('delRain',cur+'.'+i,'刪除','del')}</div>`:''}</li>`}).join('')+'</ul>';
+    if(editing)h+=ctl('addRain',cur,'＋ 新增備案','add')}
   $('panel').innerHTML=h}
 
 function prog(){const all=document.querySelectorAll('#todoList input'),n=[...all].filter(c=>c.checked).length;
@@ -446,15 +475,57 @@ const mapUrl=(it,g)=>/^https?:\/\//.test(it.m||'')?it.m:'https://www.google.com/
 function rFood(){const F=DATA.food=DATA.food||[],TP=DATA.tips=DATA.tips||[];let done=[];try{done=JSON.parse(store.get('fk-food')||'[]')}catch(e){}
   const T=editing?'div':'label';
   $('foodBox').innerHTML='<p class="foot">打勾代表已吃過或已買，只記在你自己的手機上。資料整理自網友圖片，營業時間與公休日請以 Google 地圖和現場為準。</p>'+F.map((g,gi)=>`<h3 class="fg">${E('food.'+gi+'.g',g.g,'分類')}</h3>${editing?ctl('delFG',gi,'刪除分類','del'):''}<ul class="todo">${g.items.map((it,i)=>`<li class="edli"><${T} class="lb"><input type="checkbox" data-fk="${gi}.${i}"${done.includes(it.n)?' checked':''}><span class="box">${icons.check}</span><span class="tx"><b>${E(`food.${gi}.items.${i}.n`,it.n,'店名')}</b><span class="wp">${E(`food.${gi}.items.${i}.t`,it.t,'類型')}</span><small>${E(`food.${gi}.items.${i}.s`,it.s,'簡介')}</small>${editing?`<small>地圖連結：${E(`food.${gi}.items.${i}.m`,it.m||'','空白＝用店名搜尋')}</small>`:''}</span></${T}><a class="mp" href="${esc(mapUrl(it,g))}" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s7-6.5 7-12a7 7 0 0 0-14 0c0 5.500 7 12 7 12z" fill="#F2A497"/><circle cx="12" cy="10" r="2.5" fill="#fff"/></svg>地圖</a>${editing?ctl('delFI',gi+'.'+i,'✕','del'):''}</li>`).join('')}</ul>${editing?ctl('addFI',gi,'＋ 新增店家','add'):''}`).join('')+(editing?ctl('addFG',0,'＋ 新增分類','add'):'')+(TP.length||editing?`<h3 class="fg">小撇步</h3><ul class="tips">${TP.map((t,i)=>`<li>${E('tips.'+i,t,'內容')}${editing?ctl('delTip',i,'✕','x'):''}</li>`).join('')}</ul>${editing?ctl('addTip',0,'＋ 新增小撇步','add'):''}`:'')}
+/* ---------- 分帳 ---------- */
+const EXPK='fk-exp',RATEK='fk-rate';
+const MPI=`<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s7-6.5 7-12a7 7 0 0 0-14 0c0 5.500 7 12 7 12z" fill="#F2A497"/><circle cx="12" cy="10" r="2.5" fill="#fff"/></svg>`;
+const Exp=window.Exp={list:[],cloud:false,failed:false,
+  can(){return true},
+  set(l){this.list=l;this.failed=false;rSplitList()},
+  add(e){e.id=String(Date.now())+Math.random().toString(36).slice(2,5);this.list.push(e);store.set(EXPK,JSON.stringify(this.list));rSplitList();return Promise.resolve()},
+  del(id){this.list=this.list.filter(x=>x.id!==id);store.set(EXPK,JSON.stringify(this.list));rSplitList();return Promise.resolve()},
+  render(){rSplit()},
+  fail(){this.failed=true;rSplitList()}};
+try{Exp.list=JSON.parse(store.get(EXPK)||'[]')}catch(e){}
+const yen=n=>'¥'+Math.round(n).toLocaleString('en-US');
+/*CALC*/
+function calcSplit(M,list){const paid={},share={};M.forEach(m=>{paid[m]=0;share[m]=0});let total=0;
+  list.forEach(e=>{const a=(e.among||[]).filter(n=>n in share);if(!(e.payer in paid)||!a.length||!(e.amt>0))return;
+    total+=e.amt;paid[e.payer]+=e.amt;a.forEach(n=>share[n]+=e.amt/a.length)});
+  const bal=M.map(m=>({m,paid:paid[m],share:share[m],net:Math.round(paid[m]-share[m])}));
+  const cr=bal.filter(b=>b.net>0).map(b=>({m:b.m,net:b.net})).sort((x,y)=>y.net-x.net),
+        db=bal.filter(b=>b.net<0).map(b=>({m:b.m,net:-b.net})).sort((x,y)=>y.net-x.net),tr=[];
+  let i=0,j=0;while(i<db.length&&j<cr.length){const x=Math.min(db[i].net,cr[j].net);if(x>0)tr.push({from:db[i].m,to:cr[j].m,amt:x});db[i].net-=x;cr[j].net-=x;if(db[i].net<=0)i++;if(cr[j].net<=0)j++}
+  return {bal,tr,total}}
+/*ENDCALC*/
+function rSplitMem(){const M=DATA.members;
+  $('spMem').innerHTML='<p class="foot">成員（要新增或刪除，請在「編輯」模式操作）</p><div class="sp-who">'+M.map((m,i)=>`<span class="pc" style="background:var(--yellow)">${esc(m)}${editing?`<button type="button" class="ed x" data-act="delMem" data-a="${i}">✕</button>`:''}</span>`).join('')+'</div>'+(editing?ctl('addMem',0,'＋ 新增成員','add'):'')}
+function rSplitForm(){const M=DATA.members,rate=store.get(RATEK)||'0.21';
+  let h=`<label class="edrow">匯率（1 日圓約等於台幣）<br><input type="number" id="spRate" step="0.001" min="0" value="${esc(rate)}" style="width:7em"></label>`;
+  if(!Exp.can())h+='<p class="foot">想記帳，請先點上方「編輯」登入。</p>';
+  else h+=`<form class="splitform"><input id="spText" maxlength="40" placeholder="花了什麼？例如：晚餐燒肉" autocomplete="off" required><input id="spAmt" type="number" inputmode="numeric" min="1" step="1" placeholder="金額（日圓）" required><label class="edrow">誰先付的<br><select id="spPayer">${M.map(m=>`<option>${esc(m)}</option>`).join('')}</select></label><div class="edrow">誰要分攤（至少選 1 人）</div><div class="sp-who" id="spAmong">${M.map(m=>`<label><input type="checkbox" value="${esc(m)}" checked><span>${esc(m)}</span></label>`).join('')}</div><button class="sp-go">記一筆</button></form>`;
+  $('spForm').innerHTML=h}
+function rSplitList(){const M=DATA.members,rate=parseFloat(store.get(RATEK)||'0.21')||0,r=calcSplit(M,Exp.list),twd=n=>rate?`（約 NT$${Math.round(n*rate).toLocaleString('en-US')}）`:'';
+  if(Exp.failed){$('spSum').innerHTML='';$('spList').innerHTML='<p class="foot">讀取失敗，請確認 Firestore 規則已更新</p>';return}
+  $('spSum').innerHTML=`<div class="card sp-sum"><h3>結算</h3><p class="big">總共 ${yen(r.total)} <small>${twd(r.total)}</small></p><div class="rows">`+r.bal.map(b=>`<div><span>${esc(b.m)}</span><em>先付 ${yen(b.paid)}・應分攤 ${yen(b.share)}・<b class="${b.net>0?'sp-pos':b.net<0?'sp-neg':''}">${b.net>0?'可收回 ':b.net<0?'要付 ':''}${yen(Math.abs(b.net))}</b></em></div>`).join('')+'</div><div class="sp-tr">'+(r.tr.length?r.tr.map(t=>`<div>${esc(t.from)} 付給 ${esc(t.to)}　<b>${yen(t.amt)}</b> <small>${twd(t.amt)}</small></div>`).join(''):`<div class="sp-ok">${Exp.list.length?'目前已結清':'還沒有帳目'}</div>`)+'</div></div>';
+  const can=Exp.can(),L=[...Exp.list].sort((a,b)=>(b.ts||0)-(a.ts||0)),dt=t=>{const d=new Date(t);return (d.getMonth()+1)+'/'+d.getDate()};
+  $('spList').innerHTML=L.length?L.map(e=>`<div class="msg">${can?`<button type="button" class="ed x" data-xdel="${esc(e.id)}">✕</button>`:''}<small>${dt(e.ts||0)}</small> <b>${esc(e.text)}</b>　${yen(e.amt)}<br><small>${esc(e.payer)} 先付・分攤：${esc((e.among||[]).join('、'))}</small></div>`).join(''):''}
+function rSplit(){rSplitMem();rSplitForm();rSplitList()}
+document.addEventListener('submit',ev=>{const f=ev.target;if(!f.classList||!f.classList.contains('splitform'))return;ev.preventDefault();
+  if(!Exp.can()){alert('請先點上方「編輯」登入');return}
+  const text=$('spText').value.trim(),amt=Math.round(+$('spAmt').value),payer=$('spPayer').value,among=[...document.querySelectorAll('#spAmong input:checked')].map(i=>i.value);
+  if(!text||!(amt>0))return;if(!among.length){alert('至少選 1 位分攤的人');return}
+  Exp.add({text,amt,payer,among,ts:Date.now()}).then(()=>{$('spText').value='';$('spAmt').value='';$('spText').focus()}).catch(er=>alert('儲存失敗：'+(er.code||er.message)))});
+document.addEventListener('click',ev=>{const b=ev.target.closest('[data-xdel]');if(!b||!Exp.can())return;if(confirm('刪除這一筆帳？'))Exp.del(b.dataset.xdel)});
+document.addEventListener('input',ev=>{if(ev.target.id==='spRate'){store.set(RATEK,ev.target.value);rSplitList()}});
 function fixEd(){document.querySelectorAll('.e').forEach(e=>{try{e.contentEditable=editing?'plaintext-only':'false'}catch(_){e.contentEditable=editing?'true':'false'}})}
-function render(){rHero();rFlights();rDays();rTodo();rStay();rFood();fixEd()}
+function render(){DATA.members=DATA.members||['Amy','Ariel'];rHero();rFlights();rDays();rTodo();rStay();rFood();rSplit();fixEd()}
 
 function bump(tid,pid){const t=$(tid),p=$(pid);if(t)t.scrollIntoView({inline:'center',block:'nearest'});
   if(reduce.matches)return;if(t)t.classList.add('bounce');p.classList.remove('pop');void p.offsetWidth;p.classList.add('pop')}
 
 document.addEventListener('click',ev=>{
   const tab=ev.target.closest('.tab');
-  if(tab){if(tab.dataset.d!==undefined){cur=+tab.dataset.d;rDays();fixEd();bump('tab'+cur,'panel')}else{fcur=+tab.dataset.f;rFlights();fixEd();bump('ftab'+fcur,'fpanel')}return}
+  if(tab){if(tab.dataset.d!==undefined){cur=+tab.dataset.d;rDays();fixEd();bump('tab'+cur,'panel')}else if(tab.dataset.f!==undefined){fcur=+tab.dataset.f;rFlights();fixEd();bump('ftab'+fcur,'fpanel')}return}
   const el=ev.target.closest('[data-act]');if(!el)return;
   const act=el.dataset.act,[i,j,k]=String(el.dataset.a).split('.'),ti=+i,tj=+j,D=DATA;
   switch(act){
@@ -486,6 +557,10 @@ document.addEventListener('click',ev=>{
     case 'addFG':D.food.push({g:'新分類',items:[]});break;
     case 'delTip':D.tips.splice(ti,1);break;
     case 'addTip':D.tips.push('新小撇步');break;
+    case 'delRain':D.days[ti].rain.splice(tj,1);break;
+    case 'addRain':(D.days[ti].rain=D.days[ti].rain||[]).push({n:'店名／景點',t:'類型',s:'簡介'});break;
+    case 'addMem':{const n=(prompt('成員名字')||'').trim();if(!n||D.members.includes(n))return;D.members.push(n);break}
+    case 'delMem':{const nm=D.members[ti];if(Exp.list.some(e=>e.payer===nm||(e.among||[]).includes(nm))){alert('這位成員已有帳目，不能刪除');return}if(!confirm('刪除成員 '+nm+'？'))return;D.members.splice(ti,1);break}
     default:return}
   save();render()});
 document.addEventListener('focusout',ev=>{const el=ev.target;if(!el.classList||!el.classList.contains('e'))return;
@@ -510,7 +585,7 @@ $('exBtn').onclick=()=>{
   c.querySelector('#seed').textContent=JSON.stringify({...DATA,rev:Date.now()}).replace(/</g,'\\u003c');
   c.querySelector('body').classList.remove('editing');c.querySelector('#edtool').hidden=true;c.querySelector('#editBtn').textContent='編輯';
   const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['<!DOCTYPE html>\n'+c.outerHTML],{type:'text/html'}));
-  a.download='fukuoka-trip.html';document.body.appendChild(a);a.click();a.remove()};
+  a.download='index.html';document.body.appendChild(a);a.click();a.remove()};
 
 (function(){const pad=n=>String(n).padStart(2,'0');
   function tick(){const go=new Date(DATA.meta.at+':00+08:00');if(isNaN(go))return;
@@ -574,7 +649,7 @@ if (FIREBASE_CONFIG && EDITOR_EMAILS.length) try {
   function rAuth(){const ed=ok();
     $('shopAdd').innerHTML=ed?'<form class="addrow"><input id="shopIn" maxlength="80" placeholder="想買什麼？例如：寶可夢中心 皮卡丘" autocomplete="off"><button>加入</button></form>':'<p class="foot">想新增或勾選，請先點上方「編輯」登入。</p>';
     $('noteAdd').innerHTML=ed?`<form class="addrow"><input id="noteIn" maxlength="200" placeholder="${esc(me())}：留個言…" autocomplete="off"><button>送出</button></form>`:'<p class="foot">想留言，請先點上方「編輯」登入。</p>';
-    rShop();rNotes()}
+    rShop();rNotes();Exp.render()}
   document.addEventListener('submit',e=>{const f=e.target;if(!f.classList.contains('addrow')||!ok())return;e.preventDefault();
     const i=f.querySelector('input'),v=i.value.trim();if(!v)return;
     (i.id==='shopIn'?addDoc(sc,{text:v,who:me(),done:false,ts:Date.now()}):addDoc(nc,{text:v,name:me(),ts:Date.now()}))
@@ -584,6 +659,9 @@ if (FIREBASE_CONFIG && EDITOR_EMAILS.length) try {
     if(confirm('刪除這一筆？'))deleteDoc(doc(b.closest('#shopList')?sc:nc,b.dataset.del))});
   onSnapshot(sc,q=>{shop=q.docs.map(d=>({id:d.id,...d.data()}));rShop()},bad('shopList'));
   onSnapshot(query(nc,orderBy('ts','desc'),limit(50)),q=>{notes=q.docs.map(d=>({id:d.id,...d.data()}));rNotes()},()=>{$('noteList').innerHTML='<p class="foot">讀取失敗，請確認 Firestore 規則已更新</p>'});
+  const ec=collection(db,'fukuokaTrip','main','expenses');
+  Object.assign(Exp,{cloud:true,list:[],can:ok,add:e=>addDoc(ec,e),del:id=>deleteDoc(doc(ec,id))});
+  onSnapshot(ec,q=>Exp.set(q.docs.map(d=>({id:d.id,...d.data()}))),()=>Exp.fail());
   onAuthStateChanged(auth,u=>{user=u;rAuth()});rAuth();
 } catch(e){console.warn('雲端同步未啟用，改用單機模式',e)}
 </script>
