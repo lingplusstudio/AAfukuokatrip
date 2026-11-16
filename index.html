@@ -231,6 +231,15 @@ button.tag,button.pc{font-family:inherit;color:inherit;cursor:pointer}
 .tx-tbl th{font-weight:400;background:var(--blue)}
 .tx-bad{list-style:none;display:grid;gap:4px;font-size:.9rem;margin-top:4px}
 .tx-bad li:before{content:"✕ ";color:#b3392a;font-weight:700}
+.near{padding:14px}
+.nbtns{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.nb{display:flex;flex-direction:column;align-items:center;gap:2px;border:var(--bw) solid var(--ink);border-radius:18px;padding:6px 2px 5px;text-decoration:none;color:inherit;background:var(--paper);font-size:.72rem;line-height:1.25;text-align:center}
+.nb svg{width:26px;height:26px;fill:none;stroke:#3E3A39;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.nb:active{transform:translateY(2px);background:var(--yellow)}
+.nh{margin-top:14px;display:grid;gap:2px}.nh b{font-weight:400;font-size:1.05rem}.nh small{font-size:.85rem}
+.nacts{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.na{flex:1 1 120px;text-align:center;text-decoration:none;color:inherit;border:var(--bw) solid var(--ink);border-radius:999px;padding:5px 12px;background:var(--paper)}.na.go{background:var(--coral)}
+.na:active{transform:translateY(2px)}
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
   *,*::before,*::after{animation:none!important;transition:none!important}
@@ -320,6 +329,16 @@ button.tag,button.pc{font-family:inherit;color:inherit;cursor:pointer}
     <p class="cd-msg" id="cdMsg"></p>
   </div>
 </div>
+
+<!-- NEAR -->
+<section id="near" style="padding-top:20px">
+  <h2 style="background:var(--green)">找我附近的</h2>
+  <div class="card near">
+    <div class="nbtns"><a class="nb" href="https://www.google.com/maps/search/?api=1&query=%E3%83%A9%E3%83%BC%E3%83%A1%E3%83%B3" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h18a9 8 0 0 1-18 0z" fill="#F2A497"/><path d="M8 4l4 6M12 3l2 7"/></svg><span>拉麵</span></a><a class="nb" href="https://www.google.com/maps/search/?api=1&query=%E3%83%AC%E3%82%B9%E3%83%88%E3%83%A9%E3%83%B3" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3v8M5 3v4a2 2 0 0 0 4 0V3M7 11v10M17 3c-2 2-3 5-3 8h3v10"/></svg><span>餐廳</span></a><a class="nb" href="https://www.google.com/maps/search/?api=1&query=%E3%82%AB%E3%83%95%E3%82%A7" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 9h11v5a5 5 0 0 1-5 5h-1a5 5 0 0 1-5-5z" fill="#A8D3E6"/><path d="M16 10h2a2 2 0 0 1 0 4h-2M8 3c0 2 2 2 2 4M12 3c0 2 2 2 2 4"/></svg><span>咖啡廳</span></a><a class="nb" href="https://www.google.com/maps/search/?api=1&query=%E3%82%B9%E3%82%A4%E3%83%BC%E3%83%84" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 18v-6l9-5 9 5v6z" fill="#F6D27A"/><path d="M3 12l9 4 9-4"/><circle cx="12" cy="5" r="2" fill="#F2A497"/></svg><span>甜點</span></a><a class="nb" href="https://www.google.com/maps/search/?api=1&query=%E3%82%B3%E3%83%B3%E3%83%93%E3%83%8B" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10h16v10H4zM3 6h18l1 4H2z" fill="#B9DAA5"/><path d="M10 20v-5h4v5"/></svg><span>便利商店</span></a><a class="nb" href="https://www.google.com/maps/search/?api=1&query=%E3%83%89%E3%83%A9%E3%83%83%E3%82%B0%E3%82%B9%E3%83%88%E3%82%A2" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><g transform="rotate(-35 12 12)"><rect x="3" y="8.5" width="18" height="7" rx="3.5" fill="#F2A497"/><path d="M12 8.5v7"/></g></svg><span>藥妝店</span></a><a class="nb" href="https://www.google.com/maps/search/?api=1&query=%E6%8E%88%E4%B9%B3%E5%AE%A4" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 9h6v11a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1z" fill="#fff"/><path d="M10 6h4v3h-4zM11 3h2v3M9 14h3M9 17h3"/></svg><span>哺乳室</span></a><a class="nb" href="https://www.google.com/maps/search/?api=1&query=%E3%83%88%E3%82%A4%E3%83%AC" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3" fill="#A8D3E6"/><circle cx="9" cy="8" r="1.5" fill="#fff"/><circle cx="15" cy="8" r="1.5" fill="#fff"/><path d="M9 11v7M15 11v7M7 12h4M13 12h4"/></svg><span>廁所</span></a><a class="nb" href="https://www.google.com/maps/search/?api=1&query=%E9%A7%90%E8%BB%8A%E5%A0%B4" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="#fff"/><path d="M10 17V7h3a3 3 0 0 1 0 6h-3"/></svg><span>停車場</span></a><a class="nb" href="https://www.google.com/maps/search/?api=1&query=%E3%82%AC%E3%82%BD%E3%83%AA%E3%83%B3%E3%82%B9%E3%82%BF%E3%83%B3%E3%83%89" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 21V5a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v16zM14 10h2a2 2 0 0 1 2 2v5a1.5 1.5 0 0 0 3 0V9l-3-3"/><rect x="7" y="7" width="5" height="4" fill="#F6D27A"/></svg><span>加油站</span></a></div>
+    <p class="foot">點下去會打開 Google 地圖，搜尋你目前位置附近。</p>
+    <div id="nearHotel"></div>
+  </div>
+</section>
 
 <!-- FLIGHT -->
 <section id="flight">
@@ -470,6 +489,11 @@ function rTodo(){let done=new Set();try{done=new Set(JSON.parse(store.get(CK)||'
 
 function nights(a,b){const p=s=>{const m=String(s).match(/(\d+)\/(\d+)/);return m?new Date(2001,m[1]-1,+m[2]):null},A=p(a),B=p(b);if(!A||!B)return '';let n=Math.round((B-A)/864e5);if(n<0)n+=365;return n+' 晚'}
 const link=v=>/^\+?[\d\s()-]{7,}$/.test(v)?`<a href="tel:${esc(v.replace(/[^\d+]/g,''))}">${esc(v)}</a>`:esc(v);
+function rNear(){const s=DATA.stay||{},rows=s.rows||[];
+  const ph=(rows.find(r=>/^\+?[\d\s()-]{7,}$/.test(r[1]||''))||[])[1]||'';
+  const ci=(rows.find(r=>String(r[0]).includes('入住'))||[])[1],co=(rows.find(r=>String(r[0]).includes('退房'))||[])[1];
+  const t=[ci&&'入住 '+ci,co&&'退房 '+co].filter(Boolean).join('・');
+  $('nearHotel').innerHTML=`<div class="nh"><b>${esc(s.name||'')}</b>${t?`<small>${esc(t)}</small>`:''}</div><div class="nacts">${ph?`<a class="na" href="tel:${esc(ph.replace(/[^\d+]/g,''))}">撥打飯店</a>`:''}<a class="na go" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent((s.name||'')+' '+(s.address||''))}">導航回飯店</a></div>`}
 function rStay(){const s=DATA.stay;
   $('stayBox').innerHTML=`<div class="card stay"><h3>${HSVG}<span>${E('stay.name',s.name,'住宿名稱')}</span></h3>
   <p style="margin-top:6px"><span class="pending" style="border-style:solid;background:var(--yellow)">${E('stay.badge',s.badge,'標籤')}</span> <a class="pending" style="border-style:solid;text-decoration:none;background:var(--blue)" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(s.name+' '+s.address)}" target="_blank" rel="noopener">查看地圖</a></p>
@@ -540,7 +564,7 @@ function rTax(){let done=[];try{done=JSON.parse(store.get(TAXK)||'[]')}catch(e){
 document.addEventListener('change',ev=>{const b=ev.target.closest&&ev.target.closest('[data-tx]');if(!b)return;let d=[];try{d=JSON.parse(store.get(TAXK)||'[]')}catch(e){}
   const id=b.dataset.tx;d=d.filter(x=>x!==id);if(b.checked)d.push(id);store.set(TAXK,JSON.stringify(d))});
 function fixEd(){document.querySelectorAll('.e').forEach(e=>{try{e.contentEditable=editing?'plaintext-only':'false'}catch(_){e.contentEditable=editing?'true':'false'}})}
-function render(){DATA.members=DATA.members||['Amy','Ariel'];rHero();rFlights();rDays();rTodo();rStay();rFood();rSplit();rTax();fixEd()}
+function render(){DATA.members=DATA.members||['Amy','Ariel'];rHero();rFlights();rDays();rTodo();rStay();rNear();rFood();rSplit();rTax();fixEd()}
 
 function bump(tid,pid){const t=$(tid),p=$(pid);if(t)t.scrollIntoView({inline:'center',block:'nearest'});
   if(reduce.matches)return;if(t)t.classList.add('bounce');p.classList.remove('pop');void p.offsetWidth;p.classList.add('pop')}
@@ -588,7 +612,7 @@ document.addEventListener('click',ev=>{
 document.addEventListener('focusout',ev=>{const el=ev.target;if(!el.classList||!el.classList.contains('e'))return;
   const p=el.dataset.p;setP(p,el.textContent.replace(/\s+/g,' ').trim());save();
   if(/^days\.\d+\.(d|n)$/.test(p))rTabsD();if(/^flights\.\d+\.(who|air)$/.test(p))rTabsF();
-  if(p.indexOf('stay.guests')===0)rStay(),fixEd();if(p==='meta.t1'||p==='meta.t2')document.title=DATA.meta.t1+' '+DATA.meta.t2});
+  if(p.indexOf('stay.guests')===0)rStay(),fixEd();if(p.indexOf('stay.')===0)rNear();if(p==='meta.t1'||p==='meta.t2')document.title=DATA.meta.t1+' '+DATA.meta.t2});
 document.addEventListener('keydown',ev=>{if(ev.target.classList&&ev.target.classList.contains('e')&&ev.key==='Enter'){ev.preventDefault();ev.target.blur()}
   if(ev.key==='Enter'&&ev.target.dataset&&ev.target.dataset.act==='ic')ev.target.click()});
 document.addEventListener('change',ev=>{const t=ev.target;
