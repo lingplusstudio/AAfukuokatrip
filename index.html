@@ -359,6 +359,7 @@ button.tag,button.pc{font-family:inherit;color:inherit;cursor:pointer}
 <section id="hub">
   <h2 style="background:var(--green)">清單與留言</h2>
   <div class="tabs" role="tablist" id="hubTabs" aria-label="清單與留言"><button type="button" class="tab" role="tab" id="htab-todo" data-h="todo" aria-selected="true" style="min-width:90px"><b>待辦</b></button><button type="button" class="tab" role="tab" id="htab-shop" data-h="shop" aria-selected="false" style="min-width:90px"><b>待買</b></button><button type="button" class="tab" role="tab" id="htab-food" data-h="food" aria-selected="false" style="min-width:90px"><b>美食</b></button><button type="button" class="tab" role="tab" id="htab-tax" data-h="tax" aria-selected="false" style="min-width:90px"><b>退稅</b></button><button type="button" class="tab" role="tab" id="htab-split" data-h="split" aria-selected="false" style="min-width:90px"><b>分帳</b></button><button type="button" class="tab" role="tab" id="htab-notes" data-h="notes" aria-selected="false" style="min-width:90px"><b>留言</b></button></div>
+  <p id="loginInfo" class="foot" style="margin:6px 0 0"></p>
   <div class="panel pane" id="p-todo">
 <div class="prog"><span id="progTx">0 / 0</span><div class="bar"><i id="progBar"></i></div></div>
   <ul class="todo" id="todoList"></ul>
@@ -532,7 +533,7 @@ function rSplitMem(){const M=DATA.members;
   $('spMem').innerHTML='<p class="foot">成員（要新增或刪除，請在「編輯」模式操作）</p><div class="sp-who">'+M.map((m,i)=>`<span class="pc" style="background:var(--yellow)">${esc(m)}${editing?`<button type="button" class="ed x" data-act="delMem" data-a="${i}">✕</button>`:''}</span>`).join('')+'</div>'+(editing?ctl('addMem',0,'＋ 新增成員','add'):'')}
 function rSplitForm(){const M=DATA.members,rate=store.get(RATEK)||'0.21';
   let h=`<label class="edrow">匯率（1 日圓約等於台幣）<br><input type="number" id="spRate" step="0.001" min="0" value="${esc(rate)}" style="width:7em"></label>`;
-  if(!Exp.can())h+='<p class="foot">想記帳，請先點上方「編輯」登入。</p>';
+  if(!Exp.can())h+='<p class="foot">想記帳，請先點上方「用 Google 登入」。</p>';
   else h+=`<form class="splitform"><input id="spText" maxlength="40" placeholder="花了什麼？例如：晚餐燒肉" autocomplete="off" required><input id="spAmt" type="number" inputmode="numeric" min="1" step="1" placeholder="金額（日圓）" required><label class="edrow">誰先付的<br><select id="spPayer">${M.map(m=>`<option>${esc(m)}</option>`).join('')}</select></label><div class="edrow">誰要分攤（至少選 1 人）</div><div class="sp-who" id="spAmong">${M.map(m=>`<label><input type="checkbox" value="${esc(m)}" checked><span>${esc(m)}</span></label>`).join('')}</div><button class="sp-go">記一筆</button></form>`;
   $('spForm').innerHTML=h}
 function rSplitList(){const M=DATA.members,rate=parseFloat(store.get(RATEK)||'0.21')||0,r=calcSplit(M,Exp.list),twd=n=>rate?`（約 NT$${Math.round(n*rate).toLocaleString('en-US')}）`:'';
@@ -542,7 +543,7 @@ function rSplitList(){const M=DATA.members,rate=parseFloat(store.get(RATEK)||'0.
   $('spList').innerHTML=L.length?L.map(e=>`<div class="msg">${can?`<button type="button" class="ed x" data-xdel="${esc(e.id)}">✕</button>`:''}<small>${dt(e.ts||0)}</small> <b>${esc(e.text)}</b>　${yen(e.amt)}<br><small>${esc(e.payer)} 先付・分攤：${esc((e.among||[]).join('、'))}</small></div>`).join(''):''}
 function rSplit(){rSplitMem();rSplitForm();rSplitList()}
 document.addEventListener('submit',ev=>{const f=ev.target;if(!f.classList||!f.classList.contains('splitform'))return;ev.preventDefault();
-  if(!Exp.can()){alert('請先點上方「編輯」登入');return}
+  if(!Exp.can()){alert('請先點上方「用 Google 登入」');return}
   const text=$('spText').value.trim(),amt=Math.round(+$('spAmt').value),payer=$('spPayer').value,among=[...document.querySelectorAll('#spAmong input:checked')].map(i=>i.value);
   if(!text||!(amt>0))return;if(!among.length){alert('至少選 1 位分攤的人');return}
   Exp.add({text,amt,payer,among,ts:Date.now()}).then(()=>{$('spText').value='';$('spAmt').value='';$('spText').focus()}).catch(er=>alert('儲存失敗：'+(er.code||er.message)))});
@@ -676,6 +677,9 @@ if (FIREBASE_CONFIG && EDITOR_EMAILS.length) try {
   const deny=()=>{alert('這個帳號沒有編輯權限');signOut(auth)};
   window.cloudGate=()=>{if(ok())return true;if(user){deny();return false}
     signInWithPopup(auth,new GoogleAuthProvider()).then(r=>{user=r.user;ok()?App.setEdit(true):deny()}).catch(e=>alert('登入失敗：'+(e.code||e.message)));return false};
+  window.cloudLogin=()=>{if(ok())return;if(user){deny();return}
+    signInWithPopup(auth,new GoogleAuthProvider()).then(r=>{user=r.user;if(ok())rAuth();else deny()}).catch(e=>alert('登入失敗：'+(e.code||e.message)))};
+  window.cloudLogout=()=>{signOut(auth);if(App.editing)App.setEdit(false)};
   $('edtool').querySelector('p').textContent='編輯中：改動會自動存到雲端，其他人重新整理就會看到。';
   $('exBtn').textContent='下載備份';$('rsBtn').textContent='登出';
   $('rsBtn').onclick=()=>{signOut(auth);App.setEdit(false)};
@@ -693,9 +697,10 @@ if (FIREBASE_CONFIG && EDITOR_EMAILS.length) try {
   function rNotes(){const ed=ok();
     $('noteList').innerHTML=notes.length?notes.map(n=>`<div class="msg"><small><b>${esc(n.name)}</b>　${tm(n.ts)}</small>${ed?`<button type="button" class="ed x" style="float:right" data-del="${n.id}">✕</button>`:''}<br>${esc(n.text)}</div>`).join(''):'<p class="foot">還沒有留言</p>'}
   function rAuth(){const ed=ok();
-    $('shopAdd').innerHTML=ed?'<form class="addrow"><input id="shopIn" maxlength="80" placeholder="想買什麼？例如：寶可夢中心 皮卡丘" autocomplete="off"><button>加入</button></form>':'<p class="foot">想新增或勾選，請先點上方「編輯」登入。</p>';
-    $('noteAdd').innerHTML=ed?`<form class="addrow"><input id="noteIn" maxlength="200" placeholder="${esc(me())}：留個言…" autocomplete="off"><button>送出</button></form>`:'<p class="foot">想留言，請先點上方「編輯」登入。</p>';
-    rShop();rNotes();Exp.render()}
+    $('shopAdd').innerHTML=ed?'<form class="addrow"><input id="shopIn" maxlength="80" placeholder="想買什麼？例如：寶可夢中心 皮卡丘" autocomplete="off"><button>加入</button></form>':'<p class="foot">想新增或勾選，請先點上方「用 Google 登入」。</p>';
+    $('noteAdd').innerHTML=ed?`<form class="addrow"><input id="noteIn" maxlength="200" placeholder="${esc(me())}：留個言…" autocomplete="off"><button>送出</button></form>`:'<p class="foot">想留言，請先點上方「用 Google 登入」。</p>';
+    rShop();rNotes();Exp.render();
+    const li=document.getElementById('loginInfo');if(li)li.innerHTML=ed?`已登入：${esc(me())}　<button type="button" class="ed x" onclick="window.cloudLogout&&window.cloudLogout()">登出</button>`:`<button type="button" class="ed add" onclick="window.cloudLogin&&window.cloudLogin()">用 Google 登入</button>　登入後可新增與勾選待買、留言、記分帳`}
   document.addEventListener('submit',e=>{const f=e.target;if(!f.classList.contains('addrow')||!ok())return;e.preventDefault();
     const i=f.querySelector('input'),v=i.value.trim();if(!v)return;
     (i.id==='shopIn'?addDoc(sc,{text:v,who:me(),done:false,ts:Date.now()}):addDoc(nc,{text:v,name:me(),ts:Date.now()}))
