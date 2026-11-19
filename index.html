@@ -661,7 +661,7 @@ const FIREBASE_CONFIG = {
   messagingSenderId: "264791845966",
   appId: "1:264791845966:web:4286b72d807e8c4391271f"
 };
-const EDITOR_EMAILS = ['ling19880402@gmail.com', 'thisisariel88@gmail.com'];  // 可以編輯的 Google 信箱
+const EDITOR_EMAILS = ['ling19880402@gmail.com', 'thisisariel88@gmail.com', 'gary090510@gmail.com'];  // 可以編輯的 Google 信箱
 /* ================================================================ */
 if (FIREBASE_CONFIG && EDITOR_EMAILS.length) try {
   const B='https://www.gstatic.com/firebasejs/10.12.2/';
@@ -682,7 +682,7 @@ if (FIREBASE_CONFIG && EDITOR_EMAILS.length) try {
   $('edtool').insertAdjacentHTML('beforeend',' <span id="saveSt" style="font-size:.85rem"></span>');
 
   /* ---- 待買清單與留言板（各自一筆筆存，不會互相覆蓋）---- */
-  const NAMES={'ling19880402@gmail.com':'Amy','thisisariel88@gmail.com':'Ariel'};
+  const NAMES={'ling19880402@gmail.com':'Amy','thisisariel88@gmail.com':'Ariel','gary090510@gmail.com':'Gary'};
   const sc=collection(db,'fukuokaTrip','main','shop'),nc=collection(db,'fukuokaTrip','main','notes');
   let shop=[],notes=[];
   const me=()=>user&&user.email?(NAMES[user.email.toLowerCase()]||'訪客'):'';
