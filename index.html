@@ -565,7 +565,20 @@ function rTax(){let done=[];try{done=JSON.parse(store.get(TAXK)||'[]')}catch(e){
 document.addEventListener('change',ev=>{const b=ev.target.closest&&ev.target.closest('[data-tx]');if(!b)return;let d=[];try{d=JSON.parse(store.get(TAXK)||'[]')}catch(e){}
   const id=b.dataset.tx;d=d.filter(x=>x!==id);if(b.checked)d.push(id);store.set(TAXK,JSON.stringify(d))});
 function fixEd(){document.querySelectorAll('.e').forEach(e=>{try{e.contentEditable=editing?'plaintext-only':'false'}catch(_){e.contentEditable=editing?'true':'false'}})}
-function render(){DATA.members=DATA.members||['Amy','Ariel'];rHero();rFlights();rDays();rTodo();rStay();rNear();rFood();rSplit();rTax();fixEd()}
+function applyPatches(){const D=DATA;D.patches=D.patches||[];
+  if(!D.patches.includes('fuk-coffee')){
+    const day=(D.days||[]).find(d=>d.d==='12/23');
+    if(day){const i=day.items.findIndex(x=>(x.t||'').includes('櫛田神社')&&!(x.t||'').includes('大東園'));
+      const it={p:2,time:'',t:'FUK COFFEE（櫛田神社前）',s:'地鐵櫛田神社前站走路約 1 分鐘；飛機主題咖啡廳，拿鐵拉花和杯標籤是機票風，招牌是固態布丁；營業 8:00–20:00，不能預約，假日可能要排隊，建議下午早點去，再接大東園晚餐',tags:['walk'],must:false};
+      day.items.splice(i>=0?i+1:day.items.length,0,it);D.patches.push('fuk-coffee')}}
+  if(!D.patches.includes('fuk-food')){
+    D.food=D.food||[];
+    const fk=[
+      {n:'FUK COFFEE（祇園本店）',t:'櫛田神社前站 1 分',s:'飛機主題咖啡廳，固態布丁是招牌；8:00–20:00，不能預約'},
+      {n:'FUK COFFEE Parks',t:'大濠公園站 3 分',s:'同系列，在大濠公園旁，12/23 早上散步可順路；營業時間以 Google 地圖為準'}];
+    const g=D.food.find(x=>x.g==='甜點');if(g)g.items.push(...fk);else D.food.push({g:'咖啡甜點',k:'福岡',items:fk});
+    D.patches.push('fuk-food')}}
+function render(){applyPatches();DATA.members=DATA.members||['Amy','Ariel'];rHero();rFlights();rDays();rTodo();rStay();rNear();rFood();rSplit();rTax();fixEd()}
 
 function bump(tid,pid){const t=$(tid),p=$(pid);if(t)t.scrollIntoView({inline:'center',block:'nearest'});
   if(reduce.matches)return;if(t)t.classList.add('bounce');p.classList.remove('pop');void p.offsetWidth;p.classList.add('pop')}
