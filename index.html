@@ -586,6 +586,15 @@ function applyPatches(){const D=DATA;D.patches=D.patches||[];
         it.splice(k,0,{p:2,time:'',t:'兩家會合、午餐',s:'Ariel 抵達博多後在飯店會合，午餐在博多站附近',tags:['metro'],must:false});
         k=it.findIndex(x=>(x.t||'').includes('櫛田神社'));it.splice(k+1,0,pk)}
       day.items=it;D.patches.push('plan-a-1223')}}
+  if(!D.patches.includes('fix-1223-b')){
+    const day=(D.days||[]).find(d=>d.d==='12/23');
+    if(day){let it=day.items.filter(x=>!(x.t||'').includes('大濠公園散步'));
+      const iF=it.findIndex(x=>(x.t||'').startsWith('FUK COFFEE（天神南）'));
+      if(iF>0){const f=it.splice(iF,1)[0];it.unshift(f)}
+      if(!it.some(x=>(x.t||'').includes('晚餐')||(x.t||'').includes('美食街'))){
+        const iM=it.findIndex(x=>(x.t||'').includes('聖誕市集'));
+        it.splice(iM>=0?iM:it.length,0,{p:3,time:'',t:'晚餐：博多車站美食街',s:'兩家一起吃；也可選站內的博多一双、Shin-Shin 拉麵或大地のうどん（見美食分頁）',tags:['walk'],must:false})}
+      day.items=it;D.patches.push('fix-1223-b')}}
   if(!D.patches.includes('fuk-tenjin')){const g=(D.food||[]).find(x=>x.g==='甜點');
     if(g)g.items.push({n:'FUK COFFEE（天神南）',t:'天神南站 2 分',s:'飛機主題咖啡廳，12/23 上午去；地址有兩個版本，出發前用 Google 地圖確認'});D.patches.push('fuk-tenjin')}
   if(!D.patches.includes('fuk-food')){
