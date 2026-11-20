@@ -240,6 +240,7 @@ button.tag,button.pc{font-family:inherit;color:inherit;cursor:pointer}
 .nacts{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
 .na{flex:1 1 120px;text-align:center;text-decoration:none;color:inherit;border:var(--bw) solid var(--ink);border-radius:999px;padding:5px 12px;background:var(--paper)}.na.go{background:var(--coral)}
 .na:active{transform:translateY(2px)}
+.wd{font-style:normal;font-size:.7em;opacity:.75}
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
   *,*::before,*::after{animation:none!important;transition:none!important}
@@ -450,20 +451,23 @@ function rFlights(){
     if(editing)h+=`<div class="edbar">旅伴 ${E(b0+'.who',f.who)}　航空 ${E(b0+'.air',f.air)} ${ctl('delF',fcur,'刪除旅伴','del')}</div>`;
     h+=f.list.map((t,j)=>{const b=`${b0}.list.${j}`,a=`${fcur}.${j}`,dl=t.dir==='go'?'去程':'回程';
       return `<div class="card ticket ${t.dir}"><div class="side">${icons.plane}${editing?`<button type="button" class="pc" style="background:var(--paper)" data-act="dir" data-a="${a}">${dl}</button>`:`<small>${dl}</small>`}</div>
-      <div class="body"><div class="route">${E(b+'.route',t.route,'路線')} <i>${E(b+'.date',t.date,'日期')}</i></div>
+      <div class="body"><div class="route">${E(b+'.route',t.route,'路線')} <i>${E(b+'.date',t.date,'日期')}${WS(t.date)}</i></div>
       <div class="rows">${t.rows.map((r,k)=>`<div><span>${E(`${b}.rows.${k}.0`,r[0],'項目')}</span><em>${V(`${b}.rows.${k}.1`,r[1])}${editing?ctl('delRow',`${a}.${k}`,'✕','x'):''}</em></div>`).join('')}</div>
       ${editing?ctl('addRow',a,'＋ 新增欄位','add')+ctl('delT',a,'刪除航班','del'):''}</div></div>`}).join('');
     if(editing)h+=ctl('addT',fcur,'＋ 新增航班','add')}
   if(editing)h+=ctl('addF',0,'＋ 新增旅伴','add');
   $('fpanel').innerHTML=h}
 
-function rTabsD(){$('tabs').innerHTML=DATA.days.map((x,i)=>`<button type="button" class="tab" role="tab" id="tab${i}" aria-selected="${i===cur}" data-d="${i}">${x.tree?TT:''}<b>${esc(x.d)}</b><span>${esc(x.n)}</span></button>`).join('')}
+const WD=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+function wk(d){const m=String(d||'').match(/^\s*(\d{1,2})\/(\d{1,2})\s*$/);if(!m)return '';const y=((DATA.meta&&DATA.meta.at)||'2026').slice(0,4);const t=new Date(+y,+m[1]-1,+m[2]);return isNaN(t)?'':WD[t.getDay()]}
+const WS=d=>{const w=wk(d);return w?` <em class="wd">${w}</em>`:''};
+function rTabsD(){$('tabs').innerHTML=DATA.days.map((x,i)=>`<button type="button" class="tab" role="tab" id="tab${i}" aria-selected="${i===cur}" data-d="${i}">${x.tree?TT:''}<b>${esc(x.d)}${WS(x.d)}</b><span>${esc(x.n)}</span></button>`).join('')}
 const TT=`<i class="tabhat" aria-hidden="true"><svg viewBox="0 0 40 36" fill="none" stroke="#3E3A39" stroke-width="3.5" stroke-linejoin="round" stroke-linecap="round"><path d="M6 26C8 12 20 5 32 10c-5 5-4 11 2 16z" fill="#F2A497"/><rect x="3" y="24" width="34" height="9" rx="4.5" fill="#fff"/><circle cx="33" cy="9" r="5" fill="#fff"/></svg></i>`;
 function rDays(){
   cur=Math.max(0,Math.min(cur,DATA.days.length-1));rTabsD();
   const x=DATA.days[cur];if(!x){$('panel').innerHTML=editing?ctl('addD',0,'＋ 新增一天','add'):'';return}
   const b='days.'+cur;
-  let h=`<div class="dayhead"><div class="ic"${editing?` data-act="ic" data-a="${cur}" role="button" tabindex="0" title="點一下換圖"`:''}>${icons[x.ic]||''}</div><div><small>${E(b+'.d',x.d,'日期')}</small><h3>${E(b+'.title',x.title,'標題')}</h3></div></div>`;
+  let h=`<div class="dayhead"><div class="ic"${editing?` data-act="ic" data-a="${cur}" role="button" tabindex="0" title="點一下換圖"`:''}>${icons[x.ic]||''}</div><div><small>${E(b+'.d',x.d,'日期')}${WS(x.d)}</small><h3>${E(b+'.title',x.title,'標題')}</h3></div></div>`;
   if(editing)h+=`<div class="edbar">分頁簡稱 ${E(b+'.n',x.n,'簡稱')}　<small>（點圖示可換圖）</small><br>${ctl('delD',cur,'刪除這一天','del')}${ctl('addD',0,'＋ 新增一天','add')}</div>`;
   h+=`<div class="note">重點：${E(b+'.note',x.note,'重點說明')}</div><ul class="tl">`+x.items.map((it,i)=>{
     const q=`${b}.items.${i}`,a=`${cur}.${i}`,tg=editing?'button type="button"':'span';
@@ -498,7 +502,7 @@ function rNear(){const s=DATA.stay||{},rows=s.rows||[];
 function rStay(){const s=DATA.stay;
   $('stayBox').innerHTML=`<div class="card stay"><h3>${HSVG}<span>${E('stay.name',s.name,'住宿名稱')}</span></h3>
   <p style="margin-top:6px"><span class="pending" style="border-style:solid;background:var(--yellow)">${E('stay.badge',s.badge,'標籤')}</span> <a class="pending" style="border-style:solid;text-decoration:none;background:var(--blue)" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(s.name+' '+s.address)}" target="_blank" rel="noopener">查看地圖</a></p>
-  ${s.guests.map((g,i)=>`<div class="who">${E(`stay.guests.${i}.who`,g.who,'姓名')}${editing?ctl('delG',i,'✕','x'):''}</div><div class="dates"><div><small>入住</small>${E(`stay.guests.${i}.in`,g.in,'M/D')}</div><div class="n">${nights(g.in,g.out)}</div><div><small>退房</small>${E(`stay.guests.${i}.out`,g.out,'M/D')}</div></div>`).join('')}
+  ${s.guests.map((g,i)=>`<div class="who">${E(`stay.guests.${i}.who`,g.who,'姓名')}${editing?ctl('delG',i,'✕','x'):''}</div><div class="dates"><div><small>入住</small>${E(`stay.guests.${i}.in`,g.in,'M/D')}${WS(g.in)}</div><div class="n">${nights(g.in,g.out)}</div><div><small>退房</small>${E(`stay.guests.${i}.out`,g.out,'M/D')}${WS(g.out)}</div></div>`).join('')}
   ${editing?ctl('addG',0,'＋ 新增住客','add'):''}
   <dl><div><dt>地址</dt><dd>${E('stay.address',s.address,'地址')}</dd></div>${s.rows.map((r,i)=>`<div><dt>${E(`stay.rows.${i}.0`,r[0],'項目')}</dt><dd>${editing?E(`stay.rows.${i}.1`,r[1],'內容')+ctl('delSR',i,'✕','x'):link(r[1])}</dd></div>`).join('')}</dl>
   ${editing?ctl('addSR',0,'＋ 新增資訊','add'):''}</div>`}
@@ -571,6 +575,19 @@ function applyPatches(){const D=DATA;D.patches=D.patches||[];
     if(day){const i=day.items.findIndex(x=>(x.t||'').includes('櫛田神社')&&!(x.t||'').includes('大東園'));
       const it={p:2,time:'',t:'FUK COFFEE（櫛田神社前）',s:'地鐵櫛田神社前站走路約 1 分鐘；飛機主題咖啡廳，拿鐵拉花和杯標籤是機票風，招牌是固態布丁；營業 8:00–20:00，不能預約，假日可能要排隊，建議下午早點去，再接大東園晚餐',tags:['walk'],must:false};
       day.items.splice(i>=0?i+1:day.items.length,0,it);D.patches.push('fuk-coffee')}}
+  if(!D.patches.includes('plan-a-1223')){
+    const day=(D.days||[]).find(d=>d.d==='12/23');
+    if(day){let it=day.items.filter(x=>!(x.t||'').startsWith('FUK COFFEE（櫛田神社前）')&&!(x.t||'').startsWith('大東園'));
+      const iA=it.findIndex(x=>(x.t||'').includes('Ariel 抵達'));
+      it.splice(iA>=0?iA:0,0,{p:1,time:'',t:'FUK COFFEE（天神南）',s:'地鐵七隈線天神南站走路約 2 分鐘；飛機主題咖啡廳，招牌是固態布丁；營業時間與地址出發前用 Google 地圖確認；之後可在天神、大名一帶逛逛，約 11:30 回博多',tags:['metro','walk'],must:false});
+      const iP=it.findIndex(x=>(x.t||'').includes('寶可夢中心'));
+      if(iP>=0){const pk=it.splice(iP,1)[0];pk.t='寶可夢中心（博多マルイ 2F）';pk.s='JR 博多站直結，營業 10:00–21:00；小朋友一起買寶可夢周邊';pk.tags=['walk'];pk.must=true;
+        let k=it.findIndex(x=>(x.t||'').includes('櫛田神社'));if(k<0)k=it.length;
+        it.splice(k,0,{p:2,time:'',t:'兩家會合、午餐',s:'Ariel 抵達博多後在飯店會合，午餐在博多站附近',tags:['metro'],must:false});
+        k=it.findIndex(x=>(x.t||'').includes('櫛田神社'));it.splice(k+1,0,pk)}
+      day.items=it;D.patches.push('plan-a-1223')}}
+  if(!D.patches.includes('fuk-tenjin')){const g=(D.food||[]).find(x=>x.g==='甜點');
+    if(g)g.items.push({n:'FUK COFFEE（天神南）',t:'天神南站 2 分',s:'飛機主題咖啡廳，12/23 上午去；地址有兩個版本，出發前用 Google 地圖確認'});D.patches.push('fuk-tenjin')}
   if(!D.patches.includes('fuk-food')){
     D.food=D.food||[];
     const fk=[
